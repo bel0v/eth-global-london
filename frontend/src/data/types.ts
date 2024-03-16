@@ -1,7 +1,7 @@
 export type Event = {
   id: string
   image: string
-  rewardIcon?: string
+  organiserIcon?: string
   title?: string
   date?: string
   icons?: string[]

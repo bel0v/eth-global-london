@@ -55,20 +55,20 @@ export const eventsMock: Event[] = [
     id: '1',
     image: Event1Image,
     icons: [EventIcon1, EventIcon2],
-    rewardIcon: RewardFanImage,
+    organiserIcon: RewardFanImage,
     bounties: eventBountiesMock,
   },
   {
     id: '2',
     image: Event2Image,
     icons: [EventIcon1, EventIcon2],
-    rewardIcon: RewardEthImage,
+    organiserIcon: RewardEthImage,
     bounties: [],
   },
   {
     id: '3',
     image: Event3Image,
-    rewardIcon: RewardApeImage,
+    organiserIcon: RewardApeImage,
     bounties: [],
   },
   {
