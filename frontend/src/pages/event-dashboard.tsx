@@ -168,6 +168,7 @@ export const EventDashboard = () => {
 
   const rewardedEvents = events.filter((event) => event.organiserIcon !== undefined)
   const nonRewardedEvents = events.filter((event) => event.organiserIcon === undefined)
+  const isOrganiser = sessionStorage.getItem('mode') === 'organiser'
 
   return (
     <EventDashboardRoot>
@@ -178,8 +179,11 @@ export const EventDashboard = () => {
             <EventSectionHeader>Token Gated for you!</EventSectionHeader>
             <EventCardParent>
               {rewardedEvents.map((event) => (
-                <Link to={`${event.id}`}>
-                  <EventCard key={event.id} event={event} />
+                <Link
+                  to={isOrganiser ? `${event.id}/create-bounty` : event.id}
+                  key={event.id}
+                >
+                  <EventCard event={event} />
                 </Link>
               ))}
             </EventCardParent>

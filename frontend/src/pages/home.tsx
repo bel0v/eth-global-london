@@ -113,7 +113,7 @@ export const Home = () => {
     <ChooseUserRoot>
       <ChooseARoleParent>
         <ChooseARole>Choose a Role</ChooseARole>
-        <Link to="/event-dashboard">
+        <Link to="/event-dashboard" onClick={() => sessionStorage.setItem('mode', 'fan')}>
           <RoleCard1>
             <Creators1Icon alt="" src={FanImage} />
             <FanParent>
@@ -127,18 +127,23 @@ export const Home = () => {
             </JoinButton>
           </RoleCard1>
         </Link>
-        <RoleCard2>
-          <Creators1Icon alt="" src={OrganiserImage} />
-          <FanParent>
-            <Logo1>Organizer</Logo1>
-            <YouWillUpload>
-              You will create bounties and reward fans for uploading content.
-            </YouWillUpload>
-          </FanParent>
-          <JoinButton>
-            <Logo1>Join as a Organizer</Logo1>
-          </JoinButton>
-        </RoleCard2>
+        <Link
+          to="/event-dashboard"
+          onClick={() => sessionStorage.setItem('mode', 'organiser')}
+        >
+          <RoleCard2>
+            <Creators1Icon alt="" src={OrganiserImage} />
+            <FanParent>
+              <Logo1>Organizer</Logo1>
+              <YouWillUpload>
+                You will create bounties and reward fans for uploading content.
+              </YouWillUpload>
+            </FanParent>
+            <JoinButton>
+              <Logo1>Join as a Organizer</Logo1>
+            </JoinButton>
+          </RoleCard2>
+        </Link>
       </ChooseARoleParent>
     </ChooseUserRoot>
   )

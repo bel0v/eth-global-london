@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import DashboardImage from '../images/sticky-menu/dashboard.svg'
 import StadiumImage from '../images/sticky-menu/stadium.svg'
 import SubscriptionsImage from '../images/sticky-menu/subscriptions.svg'
+import NoteImage from '../images/sticky-menu/icon-note.svg'
 import { Link } from 'react-router-dom'
 
 const Logo = styled.div`
@@ -47,29 +48,63 @@ const MenuWrapper = styled.div`
   font-size: var(--font-size-xs);
 `
 
-export const StickyMenu = () => {
-  return (
-    <MenuWrapper>
-      <Menu>
-        <Link to="/momentor-dashboard">
-          <MenuItem>
-            <DashboardIcon alt="" src={DashboardImage} />
-            <Logo>Dashboard</Logo>
-          </MenuItem>
-        </Link>
-        <Link to="/event-dashboard">
-          <MenuItem>
-            <DashboardIcon alt="" src={StadiumImage} />
-            <Logo>Explore</Logo>
-          </MenuItem>
-        </Link>
-        <Link to="/momentor-recap">
-          <MenuItem>
-            <DashboardIcon alt="" src={SubscriptionsImage} />
-            <Logo>ReCaps</Logo>
-          </MenuItem>
-        </Link>
-      </Menu>
-    </MenuWrapper>
-  )
+interface StickyMenuProps {
+  variant?: 'fan' | 'organiser'
+}
+
+export const StickyMenu = ({ variant = 'fan' }: StickyMenuProps) => {
+  switch (variant) {
+    case 'fan':
+      return (
+        <MenuWrapper>
+          <Menu>
+            <Link to="/momentor-dashboard">
+              <MenuItem>
+                <DashboardIcon alt="" src={DashboardImage} />
+                <Logo>Dashboard</Logo>
+              </MenuItem>
+            </Link>
+            <Link to="/event-dashboard">
+              <MenuItem>
+                <DashboardIcon alt="" src={StadiumImage} />
+                <Logo>Explore</Logo>
+              </MenuItem>
+            </Link>
+            <Link to="/momentor-recap">
+              <MenuItem>
+                <DashboardIcon alt="" src={SubscriptionsImage} />
+                <Logo>ReCaps</Logo>
+              </MenuItem>
+            </Link>
+          </Menu>
+        </MenuWrapper>
+      )
+    case 'organiser':
+      return (
+        <MenuWrapper>
+          <Menu>
+            <Link to="/organiser-dashboard">
+              <MenuItem>
+                <DashboardIcon alt="" src={DashboardImage} />
+                <Logo>Dashboard</Logo>
+              </MenuItem>
+            </Link>
+            <Link to="/event-dashboard">
+              <MenuItem>
+                <DashboardIcon alt="" src={NoteImage} />
+                <Logo>Create</Logo>
+              </MenuItem>
+            </Link>
+            <Link to="/momentor-recap">
+              <MenuItem>
+                <DashboardIcon alt="" src={SubscriptionsImage} />
+                <Logo>ReCaps</Logo>
+              </MenuItem>
+            </Link>
+          </Menu>
+        </MenuWrapper>
+      )
+    default:
+      return null
+  }
 }

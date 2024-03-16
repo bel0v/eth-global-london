@@ -1,21 +1,13 @@
 import styled from 'styled-components'
 import { BountyParticipants } from '../components/bounty-participants'
 import { eventBountiesMock, eventsMock } from '../data/events-mock'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import IconAddPhoto from '../images/icons/icon-photo-add.svg'
 import NoImageIcon from '../images/icons/no-image-icon.svg'
-import IconBack from '../images/icons/icon-back.png'
 import { FileUploadInput } from '../components/file-upload-input'
+import { BackButton } from '../components/back-button'
+import { fileToBase64 } from '../helpers/data'
 
-const BackButton = styled.img`
-  width: 30px;
-  position: relative;
-  border-radius: var(--br-81xl);
-  height: 30px;
-  overflow: hidden;
-  flex-shrink: 0;
-  object-fit: cover;
-`
 const FrameItem = styled.img`
   width: 40px;
   border-radius: var(--br-81xl);
@@ -271,30 +263,16 @@ export const BountyPage = () => {
   const event = eventsMock.find((event) => event.id === eventBounty.eventId)
   const freeSeatsNumber = eventBounty.participantsLimit - eventBounty.moments.length
 
-  const onFileDrop = (files: File[]) => {
+  const onFileDrop = async (files: File[]) => {
     const file = files[0]
-
-    console.log(file)
-
-    if (file) {
-      const reader = new FileReader()
-
-      reader.onload = function (event) {
-        const base64String = (event.target as FileReader).result?.toString()
-        console.log(base64String)
-        // TODO: pass to backend
-      }
-
-      reader.readAsDataURL(file)
-    }
+    const base64string = await fileToBase64(file)
+    console.log(base64string)
   }
 
   return (
     <BountyPageRoot>
       <BackgroundWrapper imageUrl={eventBounty.background}>
-        <Link to={`/event-dashboard/${eventBounty.eventId}`}>
-          <BackButton alt="" src={IconBack} />
-        </Link>
+        <BackButton to={`/event-dashboard/${eventBounty.eventId}`} />
         <EventType>
           {event?.icons?.map((icon) => (
             <EventTypeInner>

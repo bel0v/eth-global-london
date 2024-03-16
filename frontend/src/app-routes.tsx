@@ -2,11 +2,12 @@ import { Route, Routes } from 'react-router-dom'
 import { Home } from './pages/home'
 import { EventDashboard } from './pages/event-dashboard'
 import { HomeLayout } from './components/home-layout'
-import { FanLayout } from './components/fan-layout'
+import { UserLayout } from './components/user-layout'
 import { EventPage } from './pages/event-page'
 import { BountyPage } from './pages/bounty-page'
 import { MomentorDashboard } from './pages/momentor-dashboard'
 import { MomentorRecap } from './pages/momentor-recap'
+import { CreateBountyPage } from './pages/create-bounty-page'
 
 export const AppRoutes = () => {
   return (
@@ -26,9 +27,9 @@ export const AppRoutes = () => {
             <Route
               index
               element={
-                <FanLayout>
+                <UserLayout>
                   <EventDashboard />
-                </FanLayout>
+                </UserLayout>
               }
             />
             <Route
@@ -38,17 +39,25 @@ export const AppRoutes = () => {
                   <Route
                     index
                     element={
-                      <FanLayout>
+                      <UserLayout>
                         <EventPage />
-                      </FanLayout>
+                      </UserLayout>
                     }
                   />
                   <Route
                     path="/:bountyId"
                     element={
-                      <FanLayout>
+                      <UserLayout>
                         <BountyPage />
-                      </FanLayout>
+                      </UserLayout>
+                    }
+                  />
+                  <Route
+                    path="/create-bounty"
+                    element={
+                      <UserLayout>
+                        <CreateBountyPage />
+                      </UserLayout>
                     }
                   />
                 </Routes>
@@ -60,17 +69,17 @@ export const AppRoutes = () => {
       <Route
         path="/momentor-dashboard"
         element={
-          <FanLayout>
+          <UserLayout>
             <MomentorDashboard />
-          </FanLayout>
+          </UserLayout>
         }
       />
       <Route
         path="/momentor-recap"
         element={
-          <FanLayout>
+          <UserLayout>
             <MomentorRecap />
-          </FanLayout>
+          </UserLayout>
         }
       />
     </Routes>

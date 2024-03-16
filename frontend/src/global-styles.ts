@@ -43,6 +43,7 @@ export const GlobalStyles = createGlobalStyle`
     background: none;
     border-radius: 0;
     padding: 0;
+    cursor: pointer;
   }
 
   a {
@@ -112,6 +113,7 @@ export const GlobalStyles = createGlobalStyle`
   /* TO UPDATE */
 
 
+
 /* font sizes */
 --font-size-5xl: 24px;
 --font-size-base: 16px;
@@ -141,6 +143,7 @@ export const GlobalStyles = createGlobalStyle`
 --gap-3xs: 10px;
 --gap-4xs: 9px;
 --gap-base: 16px;
+--gap-xs: 12px;
 
 /* Paddings */
 --padding-5xl: 24px;
@@ -160,7 +163,5 @@ export const GlobalStyles = createGlobalStyle`
 --br-8xs: 5px;
 --br-xs: 12px;
 --br-13xl: 32px;
-
-
 }
 `
