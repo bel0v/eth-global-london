@@ -1,4 +1,7 @@
 import styled from 'styled-components'
+import DashboardImage from '../images/sticky-menu/dashboard.svg'
+import StadiumImage from '../images/sticky-menu/stadium.svg'
+import SubscriptionsImage from '../images/sticky-menu/subscriptions.svg'
 
 const Logo = styled.div`
   position: relative;
@@ -16,20 +19,7 @@ const MenuItem = styled.div`
   justify-content: flex-start;
   gap: var(--gap-9xs);
 `
-const MenuItem1 = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--gap-9xs);
-`
-const StylusNoteParent = styled.div`
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--gap-5xs);
-`
+
 const Menu = styled.div`
   width: 340px;
   border-radius: var(--br-base);
@@ -61,21 +51,17 @@ export const StickyMenu = () => {
     <MenuWrapper>
       <Menu>
         <MenuItem>
-          <DashboardIcon alt="" src="/dashboard.svg" />
+          <DashboardIcon alt="" src={DashboardImage} />
           <Logo>Dashboard</Logo>
         </MenuItem>
-        <MenuItem1>
-          <DashboardIcon alt="" src="/stadium.svg" />
+        <MenuItem>
+          <DashboardIcon alt="" src={StadiumImage} />
           <Logo>Explore</Logo>
-        </MenuItem1>
-        <StylusNoteParent>
-          <DashboardIcon alt="" src="/stylus-note.svg" />
-          <Logo>Create</Logo>
-        </StylusNoteParent>
-        <MenuItem1>
-          <DashboardIcon alt="" src="/subscriptions.svg" />
+        </MenuItem>
+        <MenuItem>
+          <DashboardIcon alt="" src={SubscriptionsImage} />
           <Logo>ReCaps</Logo>
-        </MenuItem1>
+        </MenuItem>
       </Menu>
     </MenuWrapper>
   )
