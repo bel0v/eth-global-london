@@ -20,9 +20,15 @@ export type EventBounty = {
     value: string //number string
     icon: string
   }
-  participants: number
+  moments: Moment[]
   participantsLimit: number
   isParticipating: boolean
+}
+
+export type Moment = {
+  image: string
+  userAddress: string
+  score: number
 }
 
 export type EveryTagName = [

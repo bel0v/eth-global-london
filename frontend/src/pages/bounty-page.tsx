@@ -1,9 +1,11 @@
 import styled from 'styled-components'
 import { BountyParticipants } from '../components/bounty-participants'
-import { eventBountiesMock } from '../data/events-mock'
+import { eventBountiesMock, eventsMock } from '../data/events-mock'
 import { Link, useParams } from 'react-router-dom'
 import IconAddPhoto from '../images/icons/icon-photo-add.svg'
+import NoImageIcon from '../images/icons/no-image-icon.svg'
 import IconBack from '../images/icons/icon-back.png'
+import { FileUploadInput } from '../components/file-upload-input'
 
 const BackButton = styled.img`
   width: 30px;
@@ -36,13 +38,7 @@ const EventTypeInner = styled.div`
   align-items: center;
   justify-content: center;
 `
-const FrameInner = styled.img`
-  width: 40px;
-  height: 40px;
-  overflow: hidden;
-  flex-shrink: 0;
-  object-fit: cover;
-`
+
 const EventType = styled.div`
   display: flex;
   flex-direction: row;
@@ -50,7 +46,7 @@ const EventType = styled.div`
   justify-content: flex-start;
   gap: var(--gap-5xs);
 `
-const FrameGroup = styled.div`
+const BackgroundWrapper = styled.div<{ imageUrl?: string }>`
   width: 360px;
   border-radius: 0px 0px var(--br-base) var(--br-base);
   height: 230px;
@@ -62,7 +58,7 @@ const FrameGroup = styled.div`
   justify-content: space-between;
   padding: 60px var(--padding-xs);
   box-sizing: border-box;
-  background-image: url('/frame-17@3x.png');
+  background-image: url('${(props) => props.imageUrl}');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top;
@@ -164,33 +160,7 @@ const FrameWrapper = styled.div`
   background-repeat: no-repeat;
   background-position: top;
 `
-const Fan11Container = styled.div`
-  width: 20px;
-  border-radius: var(--br-81xl);
-  background-color: var(--color-mediumorchid);
-  height: 35px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-`
-const FrameWrapper1 = styled.div`
-  width: 126px;
-  border-radius: var(--br-5xs);
-  height: 80px;
-  overflow: hidden;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding: var(--padding-5xs);
-  box-sizing: border-box;
-  background-image: url('/frame-31@3x.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: top;
-`
+
 const PhotoIcon = styled.img`
   width: 70px;
   position: absolute;
@@ -298,21 +268,41 @@ export const BountyPage = () => {
   if (eventBounty === undefined) {
     return <div>404</div>
   }
+  const event = eventsMock.find((event) => event.id === eventBounty.eventId)
+  const freeSeatsNumber = eventBounty.participantsLimit - eventBounty.moments.length
+
+  const onFileDrop = (files: File[]) => {
+    const file = files[0]
+
+    console.log(file)
+
+    if (file) {
+      const reader = new FileReader()
+
+      reader.onload = function (event) {
+        const base64String = (event.target as FileReader).result?.toString()
+        console.log(base64String)
+        // TODO: pass to backend
+      }
+
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <BountyPageRoot>
-      <FrameGroup>
+      <BackgroundWrapper imageUrl={eventBounty.background}>
         <Link to={`/event-dashboard/${eventBounty.eventId}`}>
           <BackButton alt="" src={IconBack} />
         </Link>
         <EventType>
-          <EventTypeInner>
-            <FrameItem alt="" src="/eventtypeicon@2x.png" />
-          </EventTypeInner>
-          <EventTypeInner>
-            <FrameInner alt="" src="/frame-1194@2x.png" />
-          </EventTypeInner>
+          {event?.icons?.map((icon) => (
+            <EventTypeInner>
+              <FrameItem alt="" src={icon} />
+            </EventTypeInner>
+          ))}
         </EventType>
-      </FrameGroup>
+      </BackgroundWrapper>
       <FrameContainer>
         <SundayMarch172024Parent>
           <Active>{eventBounty.date}</Active>
@@ -330,48 +320,35 @@ export const BountyPage = () => {
           </RewardCoinsParent>
         </FrameDiv>
         <FrameParent>
-          <FrameWrapper>
-            <Fan11Wrapper>
-              <Fan11Icon alt="" src="/fan1-1@2x.png" />
-            </Fan11Wrapper>
-          </FrameWrapper>
-          <FrameWrapper1>
-            <Fan11Container>
-              <Fan11Icon alt="" src="/fan1-1@2x.png" />
-            </Fan11Container>
-          </FrameWrapper1>
-          <PhotoParent>
-            <PhotoIcon alt="" src="/photo.svg" />
-            <Parent1>
-              <Active>3</Active>
-              <Active>of</Active>
-              <b>5</b>
-            </Parent1>
-            <HereCouldBe>Here could be yours</HereCouldBe>
-          </PhotoParent>
-          <PhotoParent>
-            <PhotoIcon alt="" src="/photo.svg" />
-            <Parent1>
-              <Active>4</Active>
-              <Active>of</Active>
-              <b>5</b>
-            </Parent1>
-            <HereCouldBe>Here could be yours</HereCouldBe>
-          </PhotoParent>
-          <PhotoParent>
-            <PhotoIcon alt="" src="/photo.svg" />
-            <Parent1>
-              <Active>5</Active>
-              <Active>of</Active>
-              <b>5</b>
-            </Parent1>
-            <HereCouldBe>Here could be yours</HereCouldBe>
-          </PhotoParent>
+          {eventBounty.moments.map((moment) => (
+            <FrameWrapper>
+              <Fan11Wrapper>
+                <Fan11Icon alt="" src={moment.image} />
+              </Fan11Wrapper>
+            </FrameWrapper>
+          ))}
+
+          {Array.from(Array(freeSeatsNumber)).map((_, index) => (
+            <PhotoParent key={index}>
+              <PhotoIcon alt="" src={NoImageIcon} />
+              <Parent1>
+                <Active>{eventBounty.moments.length + index + 1} of</Active>
+                <b>{eventBounty.participantsLimit}</b>
+              </Parent1>
+              <HereCouldBe>Here could be yours</HereCouldBe>
+            </PhotoParent>
+          ))}
         </FrameParent>
-        <AddPhotoAlternateParent>
-          <AddPhotoAlternateIcon alt="" src={IconAddPhoto} />
-          <b>Add Image</b>
-        </AddPhotoAlternateParent>
+        <FileUploadInput
+          onFileSelect={onFileDrop}
+          aria-label="image upload"
+          accept="image/*"
+        >
+          <AddPhotoAlternateParent>
+            <AddPhotoAlternateIcon alt="" src={IconAddPhoto} />
+            <b>Add Image</b>
+          </AddPhotoAlternateParent>
+        </FileUploadInput>
       </FrameContainer>
     </BountyPageRoot>
   )

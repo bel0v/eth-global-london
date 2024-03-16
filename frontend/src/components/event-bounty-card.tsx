@@ -45,7 +45,7 @@ const EventTypeParent = styled.div<{ imageUrl?: string }>`
   background-image: url('${(props) => props.imageUrl}');
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: top;
+  background-position: center;
 `
 
 const EventDate = styled.div`
@@ -142,7 +142,7 @@ export const EventBountyCard = ({
   event: Event
   eventBounty: EventBounty
 }) => {
-  const isComplete = eventBounty.participants === eventBounty.participantsLimit
+  const isComplete = eventBounty.moments.length === eventBounty.participantsLimit
   return (
     <EventCardWrapper>
       <EventTypeParent imageUrl={eventBounty.background}>

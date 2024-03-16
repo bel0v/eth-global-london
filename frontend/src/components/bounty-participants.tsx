@@ -28,7 +28,7 @@ const Icon = styled.img`
 `
 
 export const BountyParticipants = ({ eventBounty }: { eventBounty: EventBounty }) => {
-  const isComplete = eventBounty.participants === eventBounty.participantsLimit
+  const isComplete = eventBounty.moments.length === eventBounty.participantsLimit
 
   return (
     <EventParticipants>
@@ -41,11 +41,11 @@ export const BountyParticipants = ({ eventBounty }: { eventBounty: EventBounty }
         )}
         {!isComplete ? (
           <>
-            <div>{eventBounty.participants} of </div>
+            <div>{eventBounty.moments.length} of </div>
             <b>{eventBounty.participantsLimit}</b>
           </>
         ) : (
-          <b>{eventBounty.participants}</b>
+          <b>{eventBounty.moments.length}</b>
         )}
       </IconWrapper>
     </EventParticipants>

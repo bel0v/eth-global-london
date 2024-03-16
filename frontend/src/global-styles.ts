@@ -129,6 +129,8 @@ export const GlobalStyles = createGlobalStyle`
 --bg-warm-bold: #c1a9a4;
 --color-black: #000;
 --active: #00fb0a;
+--color-mediumorchid: #e64bd6;
+--bg-warm: #e1d7d5;
 
 /* Gaps */
 --gap-5xs: 8px;
@@ -136,6 +138,7 @@ export const GlobalStyles = createGlobalStyle`
 --gap-5xl: 24px;
 --gap-3xs: 10px;
 --gap-4xs: 9px;
+--gap-base: 16px;
 
 /* Paddings */
 --padding-5xl: 24px;
@@ -150,7 +153,7 @@ export const GlobalStyles = createGlobalStyle`
 --br-5xs: 8px;
 --br-81xl: 100px;
 --br-base: 16px;
-
+--br-13xl: 32px;
 
 }
 `

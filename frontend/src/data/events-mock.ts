@@ -26,7 +26,18 @@ export const eventBountiesMock: EventBounty[] = [
       value: '200.1',
       icon: TokenUSDCImage,
     },
-    participants: 2,
+    moments: [
+      {
+        image: '',
+        score: 0.3,
+        userAddress: 'aaaabbb',
+      },
+      {
+        image: '',
+        score: 0.2,
+        userAddress: 'cccddd',
+      },
+    ],
     participantsLimit: 5,
     isParticipating: true,
     tag: 'goal',
@@ -43,7 +54,33 @@ export const eventBountiesMock: EventBounty[] = [
       value: '500',
       icon: TokenManImage,
     },
-    participants: 5,
+    moments: [
+      {
+        image: '',
+        score: 0.3,
+        userAddress: 'aaaabbb',
+      },
+      {
+        image: '',
+        score: 0.4,
+        userAddress: 'cccddd',
+      },
+      {
+        image: '',
+        score: 0.4,
+        userAddress: 'vdfvdfv',
+      },
+      {
+        image: '',
+        score: 0.4,
+        userAddress: 'dfvdfvdfvdfvdfv',
+      },
+      {
+        image: '',
+        score: 0.4,
+        userAddress: 'dfvdfvklmlkm',
+      },
+    ],
     participantsLimit: 5,
     isParticipating: false,
     background: undefined,
