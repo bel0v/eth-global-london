@@ -20,6 +20,9 @@ const TagImage = styled.img`
   width: 24px;
   height: 24px;
 `
+const TagTitle = styled.b`
+  font-size: var(--font-size-16);
+`
 
 const tagLabels: Record<TagName, string> = {
   area: 'Area',
@@ -47,7 +50,7 @@ export const Tag = ({ name }: TagProps) => {
   return (
     <TagWrapper>
       <TagImage alt="" src={url} />
-      <b>{tagLabels[name]}</b>
+      <TagTitle>{tagLabels[name]}</TagTitle>
     </TagWrapper>
   )
 }

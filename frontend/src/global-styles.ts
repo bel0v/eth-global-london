@@ -111,6 +111,7 @@ export const GlobalStyles = createGlobalStyle`
 
   /* TO UPDATE */
 
+
 /* font sizes */
 --font-size-5xl: 24px;
 --font-size-base: 16px;
@@ -148,6 +149,7 @@ export const GlobalStyles = createGlobalStyle`
 --padding-base: 16px;
 --padding-3xs: 10px;
 --padding-9xs: 4px;
+--padding-41xl: 60px;
 
 /* Border radiuses */
 --br-5xl: 24px;

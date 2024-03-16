@@ -12,5 +12,6 @@ module.exports = {
   rules: {
     semi: ['error', 'never'],
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    'no-irregular-whitespace': ['off'],
   },
 }

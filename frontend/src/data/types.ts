@@ -22,13 +22,18 @@ export type EventBounty = {
   }
   moments: Moment[]
   participantsLimit: number
-  isParticipating: boolean
 }
 
 export type Moment = {
   image: string
   userAddress: string
   score: number
+}
+
+export type WalletData = {
+  address: string
+  avatar: string
+  bounties: EventBounty[]
 }
 
 export type EveryTagName = [

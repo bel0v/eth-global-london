@@ -3,6 +3,7 @@ import { EventBountyCard } from '../components/event-bounty-card'
 import { Link, useParams } from 'react-router-dom'
 import { eventsMock } from '../data/events-mock'
 import CoinImage from '../images/coin-left.png'
+import { Indicator } from '../components/indicator'
 
 const CoinLeftIcon = styled.img`
   width: 180px;
@@ -54,18 +55,7 @@ const CoinLeftParent = styled.div`
   position: relative;
   gap: var(--gap-3xs);
 `
-const TokensBounties1 = styled.b`
-  position: relative;
-`
-const FrameChild = styled.div`
-  width: 16px;
-  height: 16px;
-  position: relative;
-  border-radius: var(--br-81xl);
-  background-color: var(--active);
-  overflow: hidden;
-  flex-shrink: 0;
-`
+
 const ActiveParent = styled.div`
   align-self: stretch;
   display: flex;
@@ -74,6 +64,7 @@ const ActiveParent = styled.div`
   justify-content: space-between;
   font-size: var(--font-size-5xl);
 `
+
 const BountiesWrapper = styled.div`
   padding-bottom: 110px;
   display: flex;
@@ -129,8 +120,8 @@ export const EventPage = () => {
         </CoinLeftParent>
         <BountiesWrapper>
           <ActiveParent>
-            <TokensBounties1>Active</TokensBounties1>
-            <FrameChild />
+            <b>Active</b>
+            <Indicator size={16} />
           </ActiveParent>
           {event.bounties.map((eventBounty) => (
             <Link to={`${eventBounty.id}`} key={eventBounty.id}>

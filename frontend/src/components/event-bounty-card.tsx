@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { Event, type EventBounty } from '../data/types'
+import { type Event, type EventBounty } from '../data/types'
 import { Tag } from './tag'
 import { BountyParticipants } from './bounty-participants'
+import { eventsMock } from '../data/events-mock'
 
 const EventTypeIcon = styled.img`
   width: 40px;
@@ -139,15 +140,19 @@ export const EventBountyCard = ({
   event,
   eventBounty,
 }: {
-  event: Event
+  event?: Event
   eventBounty: EventBounty
 }) => {
+  const eventObject =
+    event ?? eventsMock.find((event) => event.id === eventBounty.eventId)
   const isComplete = eventBounty.moments.length === eventBounty.participantsLimit
+  console.log(eventObject)
+
   return (
     <EventCardWrapper>
       <EventTypeParent imageUrl={eventBounty.background}>
         <EventType>
-          {event.icons?.map((icon) => (
+          {eventObject?.icons?.map((icon) => (
             <EventTypeIconWrapper key={icon}>
               <EventTypeIcon alt="" src={icon} />
             </EventTypeIconWrapper>

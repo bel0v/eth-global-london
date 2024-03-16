@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { EventBounty } from '../data/types'
 import GlassesIconRed from '../images/icons/icon-glasses-red.png'
 import GlassesIconGreen from '../images/icons/icon-glasses-green.png'
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 
 const EventParticipants = styled.div`
   display: flex;
@@ -29,12 +30,16 @@ const Icon = styled.img`
 
 export const BountyParticipants = ({ eventBounty }: { eventBounty: EventBounty }) => {
   const isComplete = eventBounty.moments.length === eventBounty.participantsLimit
+  const { primaryWallet } = useDynamicContext()
 
+  const isParticipating = eventBounty.moments.some(
+    (moment) => moment.userAddress === primaryWallet?.address
+  )
   return (
     <EventParticipants>
-      <div>{eventBounty.isParticipating ? "You're in!!!" : 'Fans participating'}</div>
+      <div>{isParticipating ? "You're in!!!" : 'Fans participating'}</div>
       <IconWrapper>
-        {eventBounty.isParticipating ? (
+        {isParticipating ? (
           <Icon alt="" src={GlassesIconGreen} />
         ) : (
           <Icon alt="" src={GlassesIconRed} />

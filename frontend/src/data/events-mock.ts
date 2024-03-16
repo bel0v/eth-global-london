@@ -39,7 +39,6 @@ export const eventBountiesMock: EventBounty[] = [
       },
     ],
     participantsLimit: 5,
-    isParticipating: true,
     tag: 'goal',
     background: BountyBg1,
   },
@@ -82,7 +81,6 @@ export const eventBountiesMock: EventBounty[] = [
       },
     ],
     participantsLimit: 5,
-    isParticipating: false,
     background: undefined,
   },
 ]
