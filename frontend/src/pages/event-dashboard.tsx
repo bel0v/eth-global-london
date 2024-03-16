@@ -19,7 +19,7 @@ const EventImageIcon = styled.img`
   flex-shrink: 0;
   object-fit: cover;
 `
-const EventRewardIcon = styled.img`
+const EventorganiserIcon = styled.img`
   width: 40px;
   position: relative;
   border-radius: var(--br-81xl);
@@ -144,7 +144,7 @@ const EventCard = ({ event }: { event: Event }) => {
     <EventCardWrapper key={event.id}>
       <EventImageParent>
         <EventImageIcon alt="" src={event.image} />
-        {event.rewardIcon && <EventRewardIcon alt="" src={event.rewardIcon} />}
+        {event.organiserIcon && <EventorganiserIcon alt="" src={event.organiserIcon} />}
       </EventImageParent>
       <EventTitleParent>
         {event.title && (
@@ -165,8 +165,8 @@ const EventCard = ({ event }: { event: Event }) => {
 export const EventDashboard = () => {
   const events = eventsMock
 
-  const rewardedEvents = events.filter((event) => event.rewardIcon !== undefined)
-  const nonRewardedEvents = events.filter((event) => event.rewardIcon === undefined)
+  const rewardedEvents = events.filter((event) => event.organiserIcon !== undefined)
+  const nonRewardedEvents = events.filter((event) => event.organiserIcon === undefined)
 
   return (
     <EventDashboardRoot>

@@ -1,7 +1,7 @@
 export type Event = {
   id: string
   image: string
-  rewardIcon?: string
+  organiserIcon?: string
   title?: string
   date?: string
   icons?: string[]
@@ -11,7 +11,7 @@ export type Event = {
 export type EventBounty = {
   id: string
   eventId: string
-  title: string
+  name: string
   date: string
   background?: string
   tag?: TagName

@@ -19,7 +19,7 @@ export const eventBountiesMock: EventBounty[] = [
   {
     eventId: '1',
     id: '11',
-    title: 'Manchester first goal',
+    name: 'Manchester first goal',
     date: '03/17/24',
     reward: {
       token: '$USDC',
@@ -35,7 +35,7 @@ export const eventBountiesMock: EventBounty[] = [
   {
     eventId: '1',
     id: '12',
-    title: 'Julian Álvarez - Corner Kick',
+    name: 'Julian Álvarez - Corner Kick',
     tag: 'corner-kick',
     date: '03/17/24',
     reward: {
@@ -55,20 +55,20 @@ export const eventsMock: Event[] = [
     id: '1',
     image: Event1Image,
     icons: [EventIcon1, EventIcon2],
-    rewardIcon: RewardFanImage,
+    organiserIcon: RewardFanImage,
     bounties: eventBountiesMock,
   },
   {
     id: '2',
     image: Event2Image,
     icons: [EventIcon1, EventIcon2],
-    rewardIcon: RewardEthImage,
+    organiserIcon: RewardEthImage,
     bounties: [],
   },
   {
     id: '3',
     image: Event3Image,
-    rewardIcon: RewardApeImage,
+    organiserIcon: RewardApeImage,
     bounties: [],
   },
   {
