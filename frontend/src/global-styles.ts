@@ -111,11 +111,13 @@ export const GlobalStyles = createGlobalStyle`
 
   /* TO UPDATE */
 
-  /* font sizes */
+/* font sizes */
 --font-size-5xl: 24px;
 --font-size-base: 16px;
 --font-size-21xl: 40px;
 --font-size-xs: 12px;
+--font-size-5xs: 8px;
+--font-size-xl: 20px;
 
 /* Colors */
 --bg-warm-light: #f9f1f1;
@@ -126,12 +128,14 @@ export const GlobalStyles = createGlobalStyle`
 --color-white: #fff;
 --bg-warm-bold: #c1a9a4;
 --color-black: #000;
+--active: #00fb0a;
 
 /* Gaps */
 --gap-5xs: 8px;
 --gap-9xs: 4px;
 --gap-5xl: 24px;
 --gap-3xs: 10px;
+--gap-4xs: 9px;
 
 /* Paddings */
 --padding-5xl: 24px;

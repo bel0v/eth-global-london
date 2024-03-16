@@ -51,49 +51,41 @@ const JoinButton = styled.div`
 const RoleCard = styled.div`
   width: 320px;
   border-radius: var(--br-24);
+  border: 1px solid var(--bg-cold);
+  box-sizing: border-box;
+  height: 320px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--padding-24);
+  position: relative;
+`
+
+const RoleCard1 = styled(RoleCard)`
   background: linear-gradient(
     196.9deg,
     rgba(249, 241, 241, 0.8),
     rgba(247, 221, 254, 0.8)
   );
-  border: 1px solid var(--bg-cold);
-  box-sizing: border-box;
-  height: 320px;
-  overflow: hidden;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--padding-24);
-  position: relative;
 `
-const RoleCard1 = styled.div`
-  width: 320px;
-  border-radius: var(--br-24);
+const RoleCard2 = styled(RoleCard)`
   background: linear-gradient(
     196.19deg,
     rgba(249, 241, 241, 0.8),
     rgba(255, 228, 176, 0.8)
   );
-  border: 1px solid var(--bg-cold);
-  box-sizing: border-box;
-  height: 320px;
-  overflow: hidden;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--padding-24);
-  position: relative;
 `
+
 const ChooseARoleParent = styled.div`
   align-self: stretch;
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   align-items: center;
   justify-content: space-between;
   padding-top: var(--padding-24);
@@ -105,7 +97,6 @@ const ChooseUserRoot = styled.div`
   width: 100%;
   position: relative;
   background-color: var(--pearl);
-  height: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,7 +113,7 @@ export const Home = () => {
       <ChooseARoleParent>
         <ChooseARole>Choose a Role</ChooseARole>
         <Link to="/event-dashboard">
-          <RoleCard>
+          <RoleCard1>
             <Creators1Icon alt="" src={FanImage} />
             <FanParent>
               <Logo1>Fan</Logo1>
@@ -133,9 +124,9 @@ export const Home = () => {
             <JoinButton>
               <Logo1>Join as a Fan</Logo1>
             </JoinButton>
-          </RoleCard>
+          </RoleCard1>
         </Link>
-        <RoleCard1>
+        <RoleCard2>
           <Creators1Icon alt="" src={OrganiserImage} />
           <FanParent>
             <Logo1>Organizer</Logo1>
@@ -146,7 +137,7 @@ export const Home = () => {
           <JoinButton>
             <Logo1>Join as a Organizer</Logo1>
           </JoinButton>
-        </RoleCard1>
+        </RoleCard2>
       </ChooseARoleParent>
     </ChooseUserRoot>
   )
