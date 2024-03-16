@@ -1,4 +1,4 @@
-import { account, db, walletClient } from '@src/config';
+import { account, db, publicClient, walletClient } from '@src/config';
 import { IReq, IRes } from './types/express/misc';
 import { Address, Hex, isAddress } from 'viem';
 import MomentNFT from '@src/constants/MomentNFT';
@@ -20,34 +20,45 @@ async function add(
       .status(HttpStatusCodes.BAD_REQUEST)
       .send('Invalid reward token address');
   const event = await db.event.findUnique({
-    where: { id: req.params.eventId },
+    where: { id: req.body.eventId },
   });
   if (!event)
     return res.status(HttpStatusCodes.BAD_REQUEST).send('Event not found');
 
-  const contract = await walletClient.deployContract({
+  const deployTxHash = await walletClient.deployContract({
     abi: MomentNFT.abi,
     bytecode: MomentNFT.bytecode as Hex,
     args: [
       req.body.maxSupply,
       account.address,
-      req.body.rewardToken as Address,
+      req.body.rewardToken,
       req.body.totalRewardedTokens,
     ],
   });
+
+  const receipt = await publicClient.waitForTransactionReceipt({
+    hash: deployTxHash,
+  });
+
+  if (!receipt.contractAddress)
+    return res
+      .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+      .send('Contract address not found');
+
+  const contractAddress = receipt.contractAddress;
 
   const bounty = await db.bounty.create({
     data: {
       name: req.body.name,
       venueImageURI: req.body.venueImageURI,
-      contractAddress: contract,
-      eventId: req.params.eventId,
+      contractAddress,
+      eventId: req.body.eventId,
     },
   });
 
   return res
     .status(HttpStatusCodes.CREATED)
-    .json({ bountyId: bounty.id, contractAddress: contract });
+    .json({ bountyId: bounty.id, contractAddress });
 }
 
 async function moments(req: IReq<{ bountyId: string }>, res: IRes) {
@@ -61,7 +72,7 @@ async function moments(req: IReq<{ bountyId: string }>, res: IRes) {
     where: { bountyId: req.params.bountyId },
   });
 
-  return res.status(HttpStatusCodes.OK).json(moments);
+  return res.status(HttpStatusCodes.OK).json({ moments });
 }
 
 async function leaderboard(req: IReq<{ bountyId: string }>, res: IRes) {

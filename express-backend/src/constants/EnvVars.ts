@@ -29,5 +29,6 @@ export default {
   },
   Blockchain: {
     PrivateKey: process.env.PRIVATE_KEY ?? '',
+    LighthouseApiKey: process.env.LIGHTHOUSE_API_KEY ?? '',
   },
 } as const;

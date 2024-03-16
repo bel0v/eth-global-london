@@ -4,6 +4,7 @@ import jetValidator from 'jet-validator';
 import Paths from '../constants/Paths';
 import EventRoutes from './EventRoutes';
 import BountyRoutes from './BountyRoutes';
+import MomentRoutes from './MomentRoutes';
 // **** Variables **** //
 
 const apiRouter = Router(),
@@ -13,7 +14,11 @@ const eventRouter = Router();
 const bountyRouter = Router();
 const momentRouter = Router();
 
-eventRouter.post(Paths.Event.Add, validate(['logoImageURI', 'string', 'body']));
+eventRouter.post(
+  Paths.Event.Add,
+  validate(['logoImageURI', 'string', 'body']),
+  EventRoutes.add
+);
 eventRouter.get(Paths.Event.Get, EventRoutes.all);
 eventRouter.get(
   Paths.Event.Bounties,
@@ -32,6 +37,20 @@ bountyRouter.get(
   Paths.Bounty.Leaderboard,
   validate(['bountyId', 'string', 'params']),
   BountyRoutes.leaderboard
+);
+
+momentRouter.post(
+  Paths.Moment.Add,
+  validate(
+    ['bountyId', 'string', 'body'],
+    ['momentImageEncoded', 'string', 'body']
+  ),
+  MomentRoutes.add
+);
+momentRouter.get(
+  Paths.Moment.Get,
+  validate(['momentId', 'string', 'params']),
+  MomentRoutes.get
 );
 
 apiRouter.use(Paths.Event.Base, eventRouter);
