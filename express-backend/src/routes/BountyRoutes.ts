@@ -38,11 +38,7 @@ async function add(
         req.body.totalReward,
       ],
     });
-  const deployTxHash = await walletClient.writeContract(request);
-
-  await publicClient.waitForTransactionReceipt({
-    hash: deployTxHash,
-  });
+  await walletClient.writeContract(request);
 
   const bounty = await db.bounty.create({
     data: {
@@ -104,9 +100,15 @@ async function get(req: IReq<{ bountyId: string }>, res: IRes) {
   return res.status(HttpStatusCodes.OK).json(bounty);
 }
 
+async function all(req: IReq, res: IRes) {
+  const allBounties = await db.bounty.findMany();
+  return res.status(HttpStatusCodes.OK).json(allBounties);
+}
+
 export default {
   add,
   moments,
   leaderboard,
   get,
+  all,
 };

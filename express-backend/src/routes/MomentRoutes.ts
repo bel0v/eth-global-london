@@ -17,7 +17,7 @@ async function add(
   }>,
   res: IRes
 ) {
-  const { bountyId, momentImageEncoded } = req.body;
+  const { bountyId, momentImageEncoded, userAddress } = req.body;
 
   const bounty = await db.bounty.findUnique({
     where: {
@@ -51,7 +51,7 @@ async function add(
     abi: MomentNFT.abi,
     address: bounty.contractAddress as Address,
     functionName: 'mint',
-    args: [req.body.userAddress as Address, imageURI, BigInt(score)],
+    args: [userAddress as Address, imageURI, BigInt(score)],
   });
 
   // save to database
@@ -60,6 +60,7 @@ async function add(
       bountyId,
       imageURI,
       score,
+      walletAddress: userAddress,
     },
   });
 

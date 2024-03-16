@@ -13,6 +13,7 @@ CREATE TABLE "Bounty" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "venueImageURI" TEXT NOT NULL,
+    "tag" TEXT NOT NULL,
     "contractAddress" VARCHAR(42) NOT NULL,
     "eventId" TEXT NOT NULL,
 
@@ -24,6 +25,7 @@ CREATE TABLE "Moment" (
     "id" TEXT NOT NULL,
     "score" INTEGER NOT NULL,
     "imageURI" TEXT NOT NULL,
+    "walletAddress" TEXT NOT NULL,
     "bountyId" TEXT NOT NULL,
 
     CONSTRAINT "Moment_pkey" PRIMARY KEY ("id")

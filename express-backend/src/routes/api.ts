@@ -5,14 +5,27 @@ import Paths from '../constants/Paths';
 import EventRoutes from './EventRoutes';
 import BountyRoutes from './BountyRoutes';
 import MomentRoutes from './MomentRoutes';
+import UserRoutes from './UserRoutes';
 // **** Variables **** //
 
 const apiRouter = Router(),
   validate = jetValidator();
 
+const userRouter = Router();
 const eventRouter = Router();
 const bountyRouter = Router();
 const momentRouter = Router();
+
+userRouter.get(
+  Paths.User.GetAvatar,
+  validate(['walletAddress', 'string', 'params']),
+  UserRoutes.getAvatar
+);
+userRouter.get(
+  Paths.User.GetBounties,
+  validate(['walletAddress', 'string', 'params']),
+  UserRoutes.getBounties
+);
 
 eventRouter.post(
   Paths.Event.Add,
@@ -31,6 +44,12 @@ eventRouter.get(
 
 // TODO: add stronger validate
 bountyRouter.post(Paths.Bounty.Add, BountyRoutes.add);
+bountyRouter.get(Paths.Bounty.All, BountyRoutes.all);
+bountyRouter.get(
+  Paths.Bounty.Get,
+  validate(['bountyId', 'string', 'params']),
+  BountyRoutes.get
+);
 bountyRouter.get(
   Paths.Bounty.Moments,
   validate(['bountyId', 'string', 'params']),
@@ -40,11 +59,6 @@ bountyRouter.get(
   Paths.Bounty.Leaderboard,
   validate(['bountyId', 'string', 'params']),
   BountyRoutes.leaderboard
-);
-bountyRouter.get(
-  Paths.Bounty.Get,
-  validate(['bountyId', 'string', 'params']),
-  BountyRoutes.get
 );
 
 momentRouter.post(
@@ -61,6 +75,7 @@ momentRouter.get(
   MomentRoutes.get
 );
 
+apiRouter.use(Paths.User.Base, userRouter);
 apiRouter.use(Paths.Event.Base, eventRouter);
 apiRouter.use(Paths.Bounty.Base, bountyRouter);
 apiRouter.use(Paths.Moment.Base, momentRouter);

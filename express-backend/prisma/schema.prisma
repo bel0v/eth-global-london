@@ -19,12 +19,13 @@ model Bounty {
   event           Event    @relation(fields: [eventId], references: [id])
   eventId         String
   moments         Moment[]
-}
+} 
 
 model Moment {
   id              String   @id @default(uuid())
   score           Int
   imageURI        String
+  walletAddress   String
   bounty          Bounty   @relation(fields: [bountyId], references: [id])
   bountyId        String
 }
