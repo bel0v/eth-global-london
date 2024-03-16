@@ -167,7 +167,7 @@ export const EventBountyCard = ({
               <b>{eventBounty.reward.token}</b>
             </EventBountyReward>
           </EventDateParent>
-          <ManchesterFirstGoal>{eventBounty.title}</ManchesterFirstGoal>
+          <ManchesterFirstGoal>{eventBounty.name}</ManchesterFirstGoal>
         </EventDescription>
         <EventActions>
           <BountyParticipants eventBounty={eventBounty} />

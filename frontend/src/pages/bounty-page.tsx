@@ -321,7 +321,7 @@ export const BountyPage = () => {
             <ActiveUnactiveChild />
           </ActiveUnactive>
         </SundayMarch172024Parent>
-        <ManchesterFirstGoal>{eventBounty.title}</ManchesterFirstGoal>
+        <ManchesterFirstGoal>{eventBounty.name}</ManchesterFirstGoal>
         <FrameDiv>
           <BountyParticipants eventBounty={eventBounty} />
           <RewardCoinsParent>
