@@ -14,6 +14,7 @@ model Bounty {
   id              String   @id @default(uuid())
   name            String
   venueImageURI   String
+  tag             String
   contractAddress String @unique @db.VarChar(42)
   event           Event    @relation(fields: [eventId], references: [id])
   eventId         String

@@ -13,6 +13,7 @@ export default {
   Bounty: {
     Base: '/bounty',
     Add: '/add',
+    Get: '/:bountyId',
     Moments: '/:bountyId/moments',
     Leaderboard: '/:bountyId/leaderboard',
   },

@@ -41,6 +41,11 @@ bountyRouter.get(
   validate(['bountyId', 'string', 'params']),
   BountyRoutes.leaderboard
 );
+bountyRouter.get(
+  Paths.Bounty.Get,
+  validate(['bountyId', 'string', 'params']),
+  BountyRoutes.get
+);
 
 momentRouter.post(
   Paths.Moment.Add,

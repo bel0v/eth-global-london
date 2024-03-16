@@ -1,6 +1,6 @@
 import { account, db, publicClient, walletClient } from '@src/config';
 import { IReq, IRes } from './types/express/misc';
-import { Address, Hex, isAddress } from 'viem';
+import { Hex, isAddress } from 'viem';
 import MomentNFT from '@src/constants/MomentNFT';
 import HttpStatusCodes from '@src/constants/HttpStatusCodes';
 
@@ -12,6 +12,7 @@ async function add(
     participantsLimit: bigint; // 5
     rewardToken: string;
     totalReward: bigint;
+    tag: string;
   }>,
   res: IRes
 ) {
@@ -53,6 +54,7 @@ async function add(
       venueImageURI: req.body.venueImageURI,
       contractAddress,
       eventId: req.body.eventId,
+      tag: req.body.tag,
     },
   });
 
@@ -90,8 +92,25 @@ async function leaderboard(req: IReq<{ bountyId: string }>, res: IRes) {
   return res.status(HttpStatusCodes.OK).json({ sortedMoments: leaderboard });
 }
 
+async function get(req: IReq<{ bountyId: string }>, res: IRes) {
+  const bounty = await db.bounty.findUnique({
+    where: {
+      id: req.params.bountyId,
+    },
+  });
+
+  if (!bounty) {
+    return res
+      .status(HttpStatusCodes.NOT_FOUND)
+      .json({ message: 'Bounty not found' });
+  }
+
+  return res.status(HttpStatusCodes.OK).json(bounty);
+}
+
 export default {
   add,
   moments,
   leaderboard,
+  get,
 };
