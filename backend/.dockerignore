@@ -1,0 +1,10 @@
+nltk_data
+Scripts
+Lib
+Include
+share
+test_images
+__pycache__
+*.log
+image_captioning.py
+test.py
