@@ -1,8 +1,8 @@
 import { account, db, publicClient, walletClient } from '@src/config';
 import { IReq, IRes } from './types/express/misc';
-import { Hex, isAddress } from 'viem';
-import MomentNFT from '@src/constants/MomentNFT';
+import { isAddress } from 'viem';
 import HttpStatusCodes from '@src/constants/HttpStatusCodes';
+import MomentFactory from '@src/constants/MomentFactory';
 
 async function add(
   req: IReq<{
@@ -26,33 +26,29 @@ async function add(
   if (!event)
     return res.status(HttpStatusCodes.BAD_REQUEST).send('Event not found');
 
-  const deployTxHash = await walletClient.deployContract({
-    abi: MomentNFT.abi,
-    bytecode: MomentNFT.bytecode as Hex,
-    args: [
-      req.body.participantsLimit,
-      account.address,
-      req.body.rewardToken,
-      req.body.totalReward,
-    ],
-  });
+  const { result: momentNFTAddress, request } =
+    await publicClient.simulateContract({
+      abi: MomentFactory.abi,
+      address: MomentFactory.address,
+      functionName: 'createBounty',
+      args: [
+        req.body.participantsLimit,
+        account.address,
+        req.body.rewardToken,
+        req.body.totalReward,
+      ],
+    });
+  const deployTxHash = await walletClient.writeContract(request);
 
-  const receipt = await publicClient.waitForTransactionReceipt({
+  await publicClient.waitForTransactionReceipt({
     hash: deployTxHash,
   });
-
-  if (!receipt.contractAddress)
-    return res
-      .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
-      .send('Contract address not found');
-
-  const contractAddress = receipt.contractAddress;
 
   const bounty = await db.bounty.create({
     data: {
       name: req.body.name,
       venueImageURI: req.body.venueImageURI,
-      contractAddress,
+      contractAddress: momentNFTAddress,
       eventId: req.body.eventId,
       tag: req.body.tag,
     },
@@ -60,7 +56,7 @@ async function add(
 
   return res
     .status(HttpStatusCodes.CREATED)
-    .json({ bountyId: bounty.id, contractAddress });
+    .json({ bountyId: bounty.id, momentNFTAddress });
 }
 
 async function moments(req: IReq<{ bountyId: string }>, res: IRes) {

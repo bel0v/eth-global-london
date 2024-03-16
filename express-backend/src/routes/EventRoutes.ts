@@ -6,7 +6,7 @@ async function add(
   req: IReq<{ eventImage: string; organizerImage: string; date: string }>,
   res: IRes
 ) {
-  const eventId = await db.event.create({
+  const event = await db.event.create({
     data: {
       eventImage: req.body.eventImage,
       organizerImage: req.body.organizerImage,
@@ -14,7 +14,7 @@ async function add(
     },
   });
 
-  return res.status(HttpStatusCodes.CREATED).json({ eventId });
+  return res.status(HttpStatusCodes.CREATED).json({ eventId: event.id });
 }
 
 async function all(req: IReq, res: IRes) {

@@ -1,4 +1,4 @@
-import { db } from '@src/config';
+import { db, walletClient } from '@src/config';
 import { IReq, IRes } from './types/express/misc';
 import HttpStatusCodes from '@src/constants/HttpStatusCodes';
 import { randomInt } from 'crypto';
@@ -6,6 +6,8 @@ import lighthouse from '@lighthouse-web3/sdk';
 import EnvVars from '@src/constants/EnvVars';
 import fs from 'fs';
 import { createNFTJson } from '@src/util/misc';
+import MomentNFT from '@src/constants/MomentNFT';
+import { Address } from 'viem';
 
 async function add(
   req: IReq<{
@@ -31,8 +33,6 @@ async function add(
   // calculate score
   const score = randomInt(0, 10000);
 
-  // if(score is good enough)
-
   const filePath = createNFTJson(momentImageEncoded, score);
   // deploy to filecoin
   const filecoinResponse = await lighthouse.upload(
@@ -47,7 +47,12 @@ async function add(
     'https://gateway.lighthouse.storage/ipfs/' + filecoinResponse.data.Hash;
 
   // mint NFT
-  // TODO
+  await walletClient.writeContract({
+    abi: MomentNFT.abi,
+    address: bounty.contractAddress as Address,
+    functionName: 'mint',
+    args: [req.body.userAddress as Address, imageURI, BigInt(score)],
+  });
 
   // save to database
   const moment = await db.moment.create({
