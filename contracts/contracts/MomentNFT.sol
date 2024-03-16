@@ -27,7 +27,7 @@ contract MomentNFT is AccessControl, ERC721URIStorage {
 
     constructor(
         uint256 maxSupply_,
-        address scoringAgent,
+        address scoringAgent_,
         IERC20 rewardToken_,
         uint256 totalRewardedTokens_
     ) ERC721("MomentNFT", "MNFT") {
@@ -36,7 +36,7 @@ contract MomentNFT is AccessControl, ERC721URIStorage {
         totalRewardedTokens = totalRewardedTokens_;
 
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(AI_SCORING_AGENT, scoringAgent);
+        _grantRole(AI_SCORING_AGENT, scoringAgent_);
     }
 
     function mint(
