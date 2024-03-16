@@ -1,4 +1,4 @@
-import { db } from '@src/db';
+import { db } from '@src/config';
 import { IReq, IRes } from './types/express/misc';
 import HttpStatusCodes from '@src/constants/HttpStatusCodes';
 

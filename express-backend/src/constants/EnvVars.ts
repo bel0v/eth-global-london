@@ -27,4 +27,7 @@ export default {
   Db: {
     Url: process.env.DATABASE_URL ?? '',
   },
+  Blockchain: {
+    PrivateKey: process.env.PRIVATE_KEY ?? '',
+  },
 } as const;

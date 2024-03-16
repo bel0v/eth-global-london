@@ -40,7 +40,8 @@
     "jsonfile": "^6.1.0",
     "module-alias": "^2.2.3",
     "morgan": "^1.10.0",
-    "ts-command-line-args": "^2.5.1"
+    "ts-command-line-args": "^2.5.1",
+    "viem": "^2.8.10"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.7",
