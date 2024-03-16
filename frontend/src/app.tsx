@@ -3,6 +3,8 @@ import { GlobalStyles } from './global-styles'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum'
 import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+const queryClient = new QueryClient()
 
 function App() {
   return (
@@ -12,10 +14,12 @@ function App() {
         walletConnectors: [EthereumWalletConnectors],
       }}
     >
-      <Router>
-        <GlobalStyles />
-        <AppRoutes />
-      </Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <GlobalStyles />
+          <AppRoutes />
+        </Router>
+      </QueryClientProvider>
     </DynamicContextProvider>
   )
 }

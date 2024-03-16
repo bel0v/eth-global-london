@@ -9,7 +9,13 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react()],
     server: {
-      port: 3000,
+      port: 3030,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+        },
+      },
     },
   }
 })

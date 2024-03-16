@@ -1,8 +1,8 @@
-import { db } from '@src/config';
-import HttpStatusCodes from '@src/constants/HttpStatusCodes';
-import { IReq, IRes } from './types/express/misc';
-import { getNoun } from '@src/util/misc';
-import { isAddress } from 'viem';
+import { db } from "@src/config";
+import HttpStatusCodes from "@src/constants/HttpStatusCodes";
+import { IReq, IRes } from "./types/express/misc";
+import { getNoun } from "@src/util/misc";
+import { isAddress } from "viem";
 
 async function getBounties(req: IReq<{ walletAddress: string }>, res: IRes) {
   const momentIds = await db.moment
@@ -35,7 +35,7 @@ async function getAvatar(req: IReq<{ walletAddress: string }>, res: IRes) {
   if (!isAddress(req.params.walletAddress)) {
     return res
       .status(HttpStatusCodes.BAD_REQUEST)
-      .json({ message: 'Invalid address' });
+      .json({ message: "Invalid address" });
   }
   const avatar = getNoun(req.params.walletAddress);
 
