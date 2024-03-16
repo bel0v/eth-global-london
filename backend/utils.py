@@ -1,5 +1,5 @@
-import nltk
-import os
+# import nltk
+# import os
 import logging
 
 logFormat = logging.Formatter("%(levelname)s %(asctime)s %(module)s: %(message)s")
@@ -23,11 +23,11 @@ logger.addHandler(fileHandler)
 
 #print("Effective logger level:", logger.getEffectiveLevel())
 
-nltk.data.path.append("D:\AppData\nltk_data")
-def remove_non_english(caption):
-    print()
-    words = set(nltk.corpus.words.words())
-    return " ".join(
-        w for w in nltk.wordpunct_tokenize(caption) \
-        if w.lower() in words or not w.isalpha()
-    )
+# nltk.data.path.append("D:\AppData\nltk_data")
+# def remove_non_english(caption):
+#     print()
+#     words = set(nltk.corpus.words.words())
+#     return " ".join(
+#         w for w in nltk.wordpunct_tokenize(caption) \
+#         if w.lower() in words or not w.isalpha()
+#     )

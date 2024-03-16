@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 import requests
 import base64
-from utils import remove_non_english
 load_dotenv()
 from utils import logger
 
