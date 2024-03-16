@@ -4,6 +4,7 @@ import { EventDashboard } from './pages/event-dashboard'
 import { HomeLayout } from './components/home-layout'
 import { FanLayout } from './components/fan-layout'
 import { EventPage } from './pages/event-page'
+import { BountyPage } from './pages/bounty-page'
 
 export const AppRoutes = () => {
   return (
@@ -29,11 +30,26 @@ export const AppRoutes = () => {
               }
             />
             <Route
-              path="/:eventId"
+              path="/:eventId/*"
               element={
-                <FanLayout>
-                  <EventPage />
-                </FanLayout>
+                <Routes>
+                  <Route
+                    index
+                    element={
+                      <FanLayout>
+                        <EventPage />
+                      </FanLayout>
+                    }
+                  />
+                  <Route
+                    path="/:bountyId"
+                    element={
+                      <FanLayout>
+                        <BountyPage />
+                      </FanLayout>
+                    }
+                  />
+                </Routes>
               }
             />
           </Routes>

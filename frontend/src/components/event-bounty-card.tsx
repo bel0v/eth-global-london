@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 import { Event, type EventBounty } from '../data/types'
-import GlassesIconRed from '../images/icons/icon-glasses-red.png'
-import GlassesIconGreen from '../images/icons/icon-glasses-green.png'
 import { Tag } from './tag'
+import { BountyParticipants } from './bounty-participants'
 
 const EventTypeIcon = styled.img`
   width: 40px;
@@ -95,28 +94,7 @@ const EventDescription = styled.div`
   padding: var(--padding-xs) var(--padding-5xl);
   gap: var(--gap-4xs);
 `
-const GlassesHipRose1Icon = styled.img`
-  width: 40px;
-  position: relative;
-  height: 16px;
-  object-fit: cover;
-`
-const GlassesHipRose1Parent = styled.div`
-  border-radius: var(--br-81xl);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: var(--gap-9xs);
-  font-size: var(--font-size-xs);
-`
-const EventParticipants = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: var(--gap-9xs);
-`
+
 const ActionButton = styled.div`
   border-radius: var(--br-81xl);
   background: linear-gradient(95.52deg, #ffd19b, #fd97ff);
@@ -192,26 +170,7 @@ export const EventBountyCard = ({
           <ManchesterFirstGoal>{eventBounty.title}</ManchesterFirstGoal>
         </EventDescription>
         <EventActions>
-          <EventParticipants>
-            <div>
-              {eventBounty.isParticipating ? "You're in!!!" : 'Fans participating'}
-            </div>
-            <GlassesHipRose1Parent>
-              {eventBounty.isParticipating ? (
-                <GlassesHipRose1Icon alt="" src={GlassesIconGreen} />
-              ) : (
-                <GlassesHipRose1Icon alt="" src={GlassesIconRed} />
-              )}
-              {!isComplete ? (
-                <>
-                  <div>{eventBounty.participants} of </div>
-                  <b>{eventBounty.participantsLimit}</b>
-                </>
-              ) : (
-                <b>{eventBounty.participants}</b>
-              )}
-            </GlassesHipRose1Parent>
-          </EventParticipants>
+          <BountyParticipants eventBounty={eventBounty} />
           <ActionButton>
             <b> {isComplete ? 'Watch moment' : 'See bounty'}</b>
           </ActionButton>

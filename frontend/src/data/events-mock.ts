@@ -15,8 +15,9 @@ import EventIcon2 from '../images/events/event-icon-2.png'
 
 import { Event, EventBounty } from './types'
 
-const event1Bounties: EventBounty[] = [
+export const eventBountiesMock: EventBounty[] = [
   {
+    eventId: '1',
     id: '11',
     title: 'Manchester first goal',
     date: '03/17/24',
@@ -32,6 +33,7 @@ const event1Bounties: EventBounty[] = [
     background: BountyBg1,
   },
   {
+    eventId: '1',
     id: '12',
     title: 'Julian Álvarez - Corner Kick',
     tag: 'corner-kick',
@@ -54,7 +56,7 @@ export const eventsMock: Event[] = [
     image: Event1Image,
     icons: [EventIcon1, EventIcon2],
     rewardIcon: RewardFanImage,
-    bounties: event1Bounties,
+    bounties: eventBountiesMock,
   },
   {
     id: '2',

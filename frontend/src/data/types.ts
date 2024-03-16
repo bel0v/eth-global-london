@@ -10,6 +10,7 @@ export type Event = {
 
 export type EventBounty = {
   id: string
+  eventId: string
   title: string
   date: string
   background?: string

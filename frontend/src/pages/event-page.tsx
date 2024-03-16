@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { EventBountyCard } from '../components/event-bounty-card'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { eventsMock } from '../data/events-mock'
 import CoinImage from '../images/coin-left.png'
 
@@ -133,11 +133,9 @@ export const EventPage = () => {
             <FrameChild />
           </ActiveParent>
           {event.bounties.map((eventBounty) => (
-            <EventBountyCard
-              key={eventBounty.id}
-              eventBounty={eventBounty}
-              event={event}
-            />
+            <Link to={`${eventBounty.id}`} key={eventBounty.id}>
+              <EventBountyCard eventBounty={eventBounty} event={event} />
+            </Link>
           ))}
         </BountiesWrapper>
       </Content>
