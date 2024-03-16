@@ -12,7 +12,8 @@ export default {
   Event: {
     Base: "/event",
     Add: "/add",
-    Get: "/all",
+    All: "/all",
+    Get: "/:eventId",
     Bounties: "/:eventId/bounties",
   },
   Bounty: {

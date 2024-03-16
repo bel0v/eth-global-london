@@ -23,6 +23,22 @@ async function all(req: IReq, res: IRes) {
   return res.status(HttpStatusCodes.OK).json({ events });
 }
 
+async function get(req: IReq<{ eventId: string }>, res: IRes) {
+  const event = await db.event.findUnique({
+    where: {
+      id: req.params.eventId,
+    },
+  });
+
+  if (!event) {
+    return res
+      .status(HttpStatusCodes.NOT_FOUND)
+      .json({ message: 'Event not found' });
+  }
+
+  return res.status(HttpStatusCodes.OK).json(event);
+}
+
 async function bounties(req: IReq<{ eventId: string }>, res: IRes) {
   const bounties = await db.bounty.findMany({
     where: { eventId: req.params.eventId },
