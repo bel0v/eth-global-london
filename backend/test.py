@@ -8,7 +8,7 @@ URL = "http://localhost:8000/getScore/"
 PROMPT = "soccer player passing the ball"
 CWD = Path.cwd()
 IMAGE_DIR = CWD / "test_images"
-image = "Ronaldo-Goals.jpg"
+image = "corner-kick.jpg"
 
 with open(IMAGE_DIR / image, 'rb') as f:
     image = base64.b64encode(f.read())

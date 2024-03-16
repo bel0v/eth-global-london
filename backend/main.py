@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from image_caption import is_relevant, get_score
+from image_captioning_api import is_relevant, get_score
 import base64
 from pydantic import BaseModel
 from typing import Optional
@@ -36,7 +36,7 @@ async def generateScore(score: RelevancyScore):
             "status": 404,
             "error": str(e),
             "score": None,
-            "maxSimilarFeatures": None,
+            "isRelevant": isRelevant,
             "msg": "An error occurred"
         }
 

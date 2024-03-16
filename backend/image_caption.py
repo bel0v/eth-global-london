@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 load_dotenv()
+# PATH = "D:\.cache\huggingface\\"
 # #os.environ['TRANSFORMERS_CACHE'] = PATH
 # os.environ['HF_HOME'] = PATH
 # os.environ['HF_DATASETS_CACHE'] = PATH
@@ -14,10 +15,12 @@ from transformers import AutoTokenizer, AutoModel, BlipProcessor, BlipForConditi
 import torch
 from sklearn.metrics.pairwise import cosine_similarity
 from utils import logger
-logger.info(f'HF Cache: {os.environ.get("HUGGINGFACE_HUB_CACHE")}')
+from gradio_client import Client
+logger.info(f'HF Cache: {os.environ.get("HF_HOME")}')
 
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+#DEVICE = 'cpu'
 
 def LlavaModel():
     model_id = "llava-hf/vip-llava-7b-hf"
@@ -46,28 +49,76 @@ def BLIPModel():
     model = model.to(DEVICE)
     return processor, model, kwargs
 
-def caption_image(image, model, max_length=40):
-    # Loading model
+def image_captioning_api_model(image):
+    API_URL = "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning"
+    headers = {"Authorization": f"Bearer {os.environ.get('IMAGE_CAPTIONING_API_KEY')}"}
 
+    def query(image):
+        response = requests.post(API_URL, headers=headers, data=image)
+        return response.json()
+
+    logger.info("Processing image")
+    image = base64.b64decode(image)
+    output = query(image)
+    return output
+
+def semantic_similarity_api_model(image_caption, event_prompt):
+    API_URL = "https://api-inference.huggingface.co/models/sentence-transformers/msmarco-distilbert-base-tas-b"
+    headers = {"Authorization": f"Bearer {os.environ.get('IMAGE_CAPTIONING_API_KEY')}"}
+
+    def query(payload):
+        response = requests.post(API_URL, headers=headers, json=payload)
+        return response.json()
+
+    logger.info("Processing image")
+    output = query({
+        "inputs": {
+            "source_sentence": event_prompt,
+            "sentences": [
+                image_caption
+            ]
+        }
+    })
+    return output   
+
+def caption_image_api(image):
+    client = Client("https://llava.hliu.cc/")
+
+
+    result = client.predict(
+        {"foo":"bar"},	# Dict[Any, Any] (any valid json) in 'parameter_34' Json component
+        api_name="/load_demo"
+    )
+    print(result)
+    result = client.predict(
+		"llava-v1.6-34b",	# Literal['llava-v1.6-34b']  in 'parameter_10' Dropdown component
+		0.2,	# float (numeric value between 0.0 and 1.0) in 'Temperature' Slider component
+		0.7,	# float (numeric value between 0.0 and 1.0) in 'Top P' Slider component
+		1024,	# float (numeric value between 0 and 1024) in 'Max output tokens' Slider component
+		api_name="/http_bot"
+    )
+    result = client.predict(
+        "What is happening here",	# str  in 'parameter_3' Textbox component
+        str(image),	# filepath  in 'parameter_11' Image component
+        "Crop",	# Literal['Crop', 'Resize', 'Pad', 'Default']  in 'Preprocess for non-square image' Radio component
+        api_name="/add_text"
+    )
+    print(result)
+    caption = ""
+    return caption
+
+def caption_image(image, model, max_length=1024):
     # Processing image
     # Need to get image from API (Base64)
-    #img_url = 'https://storage.googleapis.com/sfr-vision-language-research/BLIP/demo.jpg' 
     logger.info("Processing image")
     image = base64.b64decode(image)
     raw_image = Image.open(BytesIO(image)).convert('RGB')
-
-    # conditional image captioning
-    # text = "a photography of"
-    # inputs = processor(raw_image, text, return_tensors="pt").to("cuda")
-
-    # out = model.generate(**inputs)
-    # print(processor.decode(out[0], skip_special_tokens=True))
 
     # unconditional image captioning
     processor, model, kwargs = model()
     inputs = processor(raw_image, return_tensors="pt", **kwargs).to(DEVICE)
 
-    out = model.generate(**inputs, max_length=max_length, max_new_tokens=200)
+    out = model.generate(**inputs, max_length=max_length, max_new_tokens=1024)
     caption = processor.decode(out[0], skip_special_tokens=True)
     
     return caption
@@ -101,7 +152,7 @@ def get_similarity_score(image_caption, event_prompt):
     doc_emb = encode(docs)
 
     #Compute dot score between query and all document embeddings
-    scores = torch.nn.CosineSimilarity(query_emb, doc_emb.transpose(0, 1))[0].cpu().tolist()
+    scores = torch.mm(query_emb, doc_emb.transpose(0, 1))[0].cpu().tolist()
     logger.debug(f"Scores {scores}")
     normalized_scores = [score/scores[0] for score in scores]
     logger.debug(f"Normalized scores: {normalized_scores}")
@@ -166,7 +217,7 @@ def get_similarity_score_cosine(image_caption, event_prompt):
         logger.debug(f"{doc}:{score}")
 
     logger.info(f"Similarity score is: {doc_score_pairs[-1][1]}")
-    return doc_score_pairs[-1][1]
+    return doc_score_pairs[-1][1][0]
 
 def get_similarity_score_cosine_L(image_caption, event_prompt):
     tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
@@ -197,15 +248,24 @@ def get_similarity_score_cosine_L(image_caption, event_prompt):
     print("Similarity score:", similarity_score)
     return similarity_score
 
-def get_score(image:str, event_prompt:str) -> int:
-    image_caption = caption_image(image=image)
-    similarity_score = get_similarity_score(
+def get_score_local(image:str, event_prompt:str, model=BLIPModel, scoring_func=get_similarity_score_cosine) -> int:
+    image_caption = caption_image(image=image, model=model)
+    similarity_score = scoring_func(
         image_caption=image_caption,
         event_prompt=event_prompt,
     )
     return similarity_score
 
-def is_relevant(score, threshold=0.6):
+def get_score(image:str, event_prompt:str, model=BLIPModel, scoring_func=get_similarity_score_cosine) -> int:
+    image_caption = image_captioning_api_model(image=image)
+    image_caption = image_caption[0]["generated_text"]
+    similarity_score = semantic_similarity_api_model(
+        image_caption=image_caption,
+        event_prompt=event_prompt
+    )
+    return similarity_score[0]
+
+def is_relevant(score, threshold=0.7):
     if score <= threshold:
         return False
 
@@ -222,20 +282,24 @@ if __name__ == "__main__":
     with open(IMAGE_DIR / image, 'rb') as f:
         image = base64.b64encode(f.read())
 
-    logger.info("Generating caption")
-    image_caption = caption_image(image, LlavaModel)
+    # logger.info("Generating caption")
+    # image_caption = caption_image(image, BLIPModel)
 
+    # image_caption = image_captioning_api_model(image)
 
-    print(image_caption)
+    # print(image_caption[0])
 
-    # PROMPT = "a blackjaack table with lots of players"
-    # test_prompt = "a soccer player kicking a ball"
-    # similarity = get_similarity_score_cosine(
-    #     image_caption=test_prompt,
-    #     event_prompt=PROMPT
-    # )
-
-    # print(similarity)
+    PROMPT = "a person riding a horse"
+    # # test_prompt = "a soccer player kicking a ball"
+    # # similarity = get_similarity_score_cosine(
+    # #     image_caption=test_prompt,
+    # #     event_prompt=PROMPT
+    # # )
+    # similarity = semantic_similarity_api_model(image_caption[0]["generated_text"], PROMPT)
+    # # # print(similarity)
         
-    # similarity = get_score(image, PROMPT)
-    # logger.info(f"Get score similarity: {similarity}")
+    similarity = get_score(image, PROMPT)
+    logger.info(f"Get score similarity: {similarity}")
+
+
+    #caption_image_api(IMAGE_DIR / image)
