@@ -23,3 +23,6 @@ share
 
 # Test Assets
 test_images
+words.zip
+*.log
+.vscode/launch.json
