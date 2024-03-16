@@ -1,12 +1,7 @@
 import styled from 'styled-components'
-import Event1Image from '../images/events/event-1.jpg'
-import Event2Image from '../images/events/event-2.jpg'
-import Event3Image from '../images/events/event-3.jpg'
-import Event4Image from '../images/events/event-4.jpg'
-import Event5Image from '../images/events/event-5.jpg'
-import RewardApeImage from '../images/events/reward-ape.jpg'
-import RewardEthImage from '../images/events/reward-eth.jpg'
-import RewardFanImage from '../images/events/reward-fan.jpg'
+import { Event } from '../data/types'
+import { eventsMock } from '../data/events-mock'
+import { Link } from 'react-router-dom'
 
 const EventSectionHeader = styled.b`
   font-size: var(--font-size-16);
@@ -131,9 +126,9 @@ const ChooseAnEventParent = styled.div`
 
 const EventDashboardRoot = styled.div`
   width: 100%;
+  padding-bottom: 110px;
   position: relative;
   background-color: var(--pearl);
-  height: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -143,14 +138,6 @@ const EventDashboardRoot = styled.div`
   color: var(--blue);
   font-family: var(--font-exo);
 `
-
-type Event = {
-  id: string
-  image: string
-  rewardIcon?: string
-  title?: string
-  date?: string
-}
 
 const EventCard = ({ event }: { event: Event }) => {
   return (
@@ -176,35 +163,7 @@ const EventCard = ({ event }: { event: Event }) => {
 }
 
 export const EventDashboard = () => {
-  const events: Event[] = [
-    {
-      id: '1',
-      image: Event1Image,
-      rewardIcon: RewardFanImage,
-    },
-    {
-      id: '2',
-      image: Event2Image,
-      rewardIcon: RewardEthImage,
-    },
-    {
-      id: '3',
-      image: Event3Image,
-      rewardIcon: RewardApeImage,
-    },
-    {
-      id: '4',
-      image: Event4Image,
-      title: 'Cats N Roses',
-      date: '07/21/2024',
-    },
-    {
-      id: '5',
-      image: Event5Image,
-      title: 'Lenny Kravitz Concert',
-      date: '07/21/2024',
-    },
-  ]
+  const events = eventsMock
 
   const rewardedEvents = events.filter((event) => event.rewardIcon !== undefined)
   const nonRewardedEvents = events.filter((event) => event.rewardIcon === undefined)
@@ -218,7 +177,9 @@ export const EventDashboard = () => {
             <EventSectionHeader>Token Gated for you!</EventSectionHeader>
             <EventCardParent>
               {rewardedEvents.map((event) => (
-                <EventCard key={event.id} event={event} />
+                <Link to={`${event.id}`}>
+                  <EventCard key={event.id} event={event} />
+                </Link>
               ))}
             </EventCardParent>
           </EventsSection>

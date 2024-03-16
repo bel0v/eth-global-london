@@ -3,6 +3,7 @@ import { ConnectButton } from './connect-button'
 
 const HeaderWrapper = styled.header`
   background: grey;
+  height: 50px;
 `
 
 export const Header = () => {
