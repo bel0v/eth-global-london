@@ -7,18 +7,23 @@ import EnvVars from '@src/constants/EnvVars';
 import fs from 'fs';
 import { createNFTJson } from '@src/util/misc';
 import MomentNFT from '@src/constants/MomentNFT';
-import { Address } from 'viem';
+import { Address, isAddress } from 'viem';
 
 async function add(
   req: IReq<{
     bountyId: string;
     momentImageEncoded: string; // base64 encoded image
-    userAddress: string;
+    walletAddress: string;
   }>,
   res: IRes
 ) {
-  const { bountyId, momentImageEncoded, userAddress } = req.body;
+  const { bountyId, momentImageEncoded, walletAddress } = req.body;
 
+  if (!isAddress(walletAddress)) {
+    return res
+      .status(HttpStatusCodes.BAD_REQUEST)
+      .json({ message: 'Invalid wallet address' });
+  }
   const bounty = await db.bounty.findUnique({
     where: {
       id: bountyId,
@@ -51,7 +56,7 @@ async function add(
     abi: MomentNFT.abi,
     address: bounty.contractAddress as Address,
     functionName: 'mint',
-    args: [userAddress as Address, imageURI, BigInt(score)],
+    args: [walletAddress, imageURI, BigInt(score)],
   });
 
   // save to database
@@ -60,15 +65,15 @@ async function add(
       bountyId,
       imageURI,
       score,
-      walletAddress: userAddress,
+      walletAddress,
     },
   });
 
   return res.status(HttpStatusCodes.CREATED).json({
     momentId: moment.id,
-    imageURI,
+    jsonURI: imageURI,
     score,
-    userAddress: req.body.userAddress,
+    walletAddress,
   });
 }
 

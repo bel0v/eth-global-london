@@ -65,7 +65,8 @@ momentRouter.post(
   Paths.Moment.Add,
   validate(
     ['bountyId', 'string', 'body'],
-    ['momentImageEncoded', 'string', 'body']
+    ['momentImageEncoded', 'string', 'body'],
+    ['walletAddress', 'string', 'body']
   ),
   MomentRoutes.add
 );
