@@ -13,8 +13,13 @@ node_modules
 /coverage
 /coverage.json
 
-#python env
+# python env
 Scripts
 Lib
 Include
 pyvenv.cfg
+__pycache__
+share
+
+# Test Assets
+test_images
