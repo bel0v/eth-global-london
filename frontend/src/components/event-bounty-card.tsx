@@ -146,7 +146,6 @@ export const EventBountyCard = ({
   const eventObject =
     event ?? eventsMock.find((event) => event.id === eventBounty.eventId)
   const isComplete = eventBounty.moments.length === eventBounty.participantsLimit
-  console.log(eventObject)
 
   return (
     <EventCardWrapper>

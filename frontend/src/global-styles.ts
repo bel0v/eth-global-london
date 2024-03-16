@@ -149,6 +149,7 @@ export const GlobalStyles = createGlobalStyle`
 --padding-base: 16px;
 --padding-3xs: 10px;
 --padding-9xs: 4px;
+--padding-45xl: 64px;
 --padding-41xl: 60px;
 
 /* Border radiuses */
@@ -157,7 +158,9 @@ export const GlobalStyles = createGlobalStyle`
 --br-81xl: 100px;
 --br-base: 16px;
 --br-8xs: 5px;
+--br-xs: 12px;
 --br-13xl: 32px;
+
 
 }
 `
