@@ -2,50 +2,27 @@ import { Router } from 'express';
 import jetValidator from 'jet-validator';
 
 import Paths from '../constants/Paths';
-import User from '@src/models/User';
-import UserRoutes from './UserRoutes';
-
-
+import EventRoutes from './EventRoutes';
 // **** Variables **** //
 
 const apiRouter = Router(),
   validate = jetValidator();
 
+const eventRouter = Router();
+const bountyRouter = Router();
+const momentRouter = Router();
 
-// ** Add UserRouter ** //
-
-const userRouter = Router();
-
-// Get all users
-userRouter.get(
-  Paths.Users.Get,
-  UserRoutes.getAll,
+eventRouter.post(Paths.Event.Add, validate(['logoImageURI', 'string', 'body']));
+eventRouter.get(Paths.Event.Get, EventRoutes.all);
+eventRouter.get(
+  Paths.Event.Bounties,
+  validate(['eventId', 'string', 'params']),
+  EventRoutes.bounties
 );
 
-// Add one user
-userRouter.post(
-  Paths.Users.Add,
-  validate(['user', User.isUser]),
-  UserRoutes.add,
-);
-
-// Update one user
-userRouter.put(
-  Paths.Users.Update,
-  validate(['user', User.isUser]),
-  UserRoutes.update,
-);
-
-// Delete one user
-userRouter.delete(
-  Paths.Users.Delete,
-  validate(['id', 'number', 'params']),
-  UserRoutes.delete,
-);
-
-// Add UserRouter
-apiRouter.use(Paths.Users.Base, userRouter);
-
+apiRouter.use(Paths.Event.Base, eventRouter);
+apiRouter.use(Paths.Bounty.Base, bountyRouter);
+apiRouter.use(Paths.Moment.Base, momentRouter);
 
 // **** Export default **** //
 

@@ -2,14 +2,23 @@
  * Express router paths go here.
  */
 
-
 export default {
   Base: '/api',
-  Users: {
-    Base: '/users',
-    Get: '/all',
+  Event: {
+    Base: '/event',
     Add: '/add',
-    Update: '/update',
-    Delete: '/delete/:id',
+    Get: '/all',
+    Bounties: '/:eventId/bounties',
+  },
+  Bounty: {
+    Base: '/bounty',
+    Add: '/add',
+    Moments: '/:bountyId/moments',
+    Leaderboard: '/:bountyId/leaderboard',
+  },
+  Moment: {
+    Base: '/moment',
+    Add: '/add',
+    Get: '/:momentId',
   },
 } as const;

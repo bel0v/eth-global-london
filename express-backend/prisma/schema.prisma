@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Event {
+  id              String   @id @default(uuid())
+  logoImageURI    String
+  bounties        Bounty[]
+}
+
+model Bounty {
+  id              String   @id @default(uuid())
+  name            String
+  venueImageURI   String
+  contractAddress String @unique @db.VarChar(42)
+  event           Event    @relation(fields: [eventId], references: [id])
+  eventId         String
+  moments         Moment[]
+}
+
+model Moment {
+  id              String   @id @default(uuid())
+  score           Int
+  imageURI        String
+  bounty          Bounty   @relation(fields: [bountyId], references: [id])
+  bountyId        String
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
