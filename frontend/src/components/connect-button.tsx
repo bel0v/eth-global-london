@@ -1,7 +1,7 @@
 import { DynamicContextProvider, DynamicWidget } from '@dynamic-labs/sdk-react-core'
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum'
 
-export const Connect = () => {
+export const ConnectButton = () => {
   return (
     <DynamicContextProvider
       settings={{

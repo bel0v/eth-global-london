@@ -1,13 +1,17 @@
-import { Header } from './Header'
-import { globalStyles } from './global-styles'
+import { AppRoutes } from './app-routes'
+import { Header } from './components/header'
+import { GlobalStyles } from './global-styles'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 function App() {
-  globalStyles()
-
   return (
-    <main>
-      <Header />
-    </main>
+    <Router>
+      <GlobalStyles />
+      <main>
+        <Header />
+        <AppRoutes />
+      </main>
+    </Router>
   )
 }
 
