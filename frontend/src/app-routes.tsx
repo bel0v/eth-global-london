@@ -5,6 +5,8 @@ import { HomeLayout } from './components/home-layout'
 import { FanLayout } from './components/fan-layout'
 import { EventPage } from './pages/event-page'
 import { BountyPage } from './pages/bounty-page'
+import { MomentorDashboard } from './pages/momentor-dashboard'
+import { MomentorRecap } from './pages/momentor-recap'
 
 export const AppRoutes = () => {
   return (
@@ -53,6 +55,22 @@ export const AppRoutes = () => {
               }
             />
           </Routes>
+        }
+      />
+      <Route
+        path="/momentor-dashboard"
+        element={
+          <FanLayout>
+            <MomentorDashboard />
+          </FanLayout>
+        }
+      />
+      <Route
+        path="/momentor-recap"
+        element={
+          <FanLayout>
+            <MomentorRecap />
+          </FanLayout>
         }
       />
     </Routes>

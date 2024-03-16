@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import DashboardImage from '../images/sticky-menu/dashboard.svg'
 import StadiumImage from '../images/sticky-menu/stadium.svg'
 import SubscriptionsImage from '../images/sticky-menu/subscriptions.svg'
+import { Link } from 'react-router-dom'
 
 const Logo = styled.div`
   position: relative;
@@ -50,18 +51,24 @@ export const StickyMenu = () => {
   return (
     <MenuWrapper>
       <Menu>
-        <MenuItem>
-          <DashboardIcon alt="" src={DashboardImage} />
-          <Logo>Dashboard</Logo>
-        </MenuItem>
-        <MenuItem>
-          <DashboardIcon alt="" src={StadiumImage} />
-          <Logo>Explore</Logo>
-        </MenuItem>
-        <MenuItem>
-          <DashboardIcon alt="" src={SubscriptionsImage} />
-          <Logo>ReCaps</Logo>
-        </MenuItem>
+        <Link to="/momentor-dashboard">
+          <MenuItem>
+            <DashboardIcon alt="" src={DashboardImage} />
+            <Logo>Dashboard</Logo>
+          </MenuItem>
+        </Link>
+        <Link to="/event-dashboard">
+          <MenuItem>
+            <DashboardIcon alt="" src={StadiumImage} />
+            <Logo>Explore</Logo>
+          </MenuItem>
+        </Link>
+        <Link to="/momentor-recap">
+          <MenuItem>
+            <DashboardIcon alt="" src={SubscriptionsImage} />
+            <Logo>ReCaps</Logo>
+          </MenuItem>
+        </Link>
       </Menu>
     </MenuWrapper>
   )
