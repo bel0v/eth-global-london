@@ -2,7 +2,7 @@ import { db } from '@src/config';
 import HttpStatusCodes from '@src/constants/HttpStatusCodes';
 import { IReq, IRes } from './types/express/misc';
 import { getNoun } from '@src/util/misc';
-import { Address, isAddress } from 'viem';
+import { isAddress } from 'viem';
 
 async function getBounties(req: IReq<{ walletAddress: string }>, res: IRes) {
   const momentIds = await db.moment

@@ -6,7 +6,6 @@ import EventRoutes from './EventRoutes';
 import BountyRoutes from './BountyRoutes';
 import MomentRoutes from './MomentRoutes';
 import UserRoutes from './UserRoutes';
-// **** Variables **** //
 
 const apiRouter = Router(),
   validate = jetValidator();
@@ -80,7 +79,5 @@ apiRouter.use(Paths.User.Base, userRouter);
 apiRouter.use(Paths.Event.Base, eventRouter);
 apiRouter.use(Paths.Bounty.Base, bountyRouter);
 apiRouter.use(Paths.Moment.Base, momentRouter);
-
-// **** Export default **** //
 
 export default apiRouter;

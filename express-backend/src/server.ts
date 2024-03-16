@@ -18,6 +18,7 @@ import HttpStatusCodes from '@src/constants/HttpStatusCodes';
 
 import { NodeEnvs } from '@src/constants/misc';
 import { RouteError } from '@src/other/classes';
+import { initEvents } from './util/init';
 
 // **** Variables **** //
 
@@ -62,5 +63,7 @@ app.use(
     return res.status(status).json({ error: err.message });
   }
 );
+
+initEvents();
 
 export default app;
