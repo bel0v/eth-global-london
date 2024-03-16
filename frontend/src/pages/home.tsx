@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import FanImage from '../images/fan.png'
 import OrganiserImage from '../images/organiser.png'
+import { Link } from 'react-router-dom'
 
 const Logo1 = styled.b`
   position: relative;
@@ -8,7 +9,7 @@ const Logo1 = styled.b`
 
 const ChooseARole = styled.div`
   position: relative;
-  font-size: var(--font-size-5xl);
+  font-size: var(--font-size-24);
 `
 const Creators1Icon = styled.img`
   width: 220px;
@@ -23,7 +24,7 @@ const Creators1Icon = styled.img`
 const YouWillUpload = styled.div`
   align-self: stretch;
   position: relative;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-16);
   text-align: center;
 `
 const FanParent = styled.div`
@@ -32,11 +33,11 @@ const FanParent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--gap-5xs);
+  gap: var(--gap-8);
   z-index: 1;
 `
 const JoinButton = styled.div`
-  border-radius: var(--br-5xs);
+  border-radius: var(--br-8);
   background-color: var(--bg-warm-light-80);
   backdrop-filter: blur(10px);
   display: flex;
@@ -45,11 +46,11 @@ const JoinButton = styled.div`
   justify-content: center;
   padding: var(--padding-12) var(--padding-24);
   z-index: 2;
-  font-size: var(--font-size-5xl);
+  font-size: var(--font-size-24);
 `
 const RoleCard = styled.div`
   width: 320px;
-  border-radius: var(--br-5xl);
+  border-radius: var(--br-24);
   background: linear-gradient(
     196.9deg,
     rgba(249, 241, 241, 0.8),
@@ -69,7 +70,7 @@ const RoleCard = styled.div`
 `
 const RoleCard1 = styled.div`
   width: 320px;
-  border-radius: var(--br-5xl);
+  border-radius: var(--br-24);
   background: linear-gradient(
     196.19deg,
     rgba(249, 241, 241, 0.8),
@@ -97,7 +98,7 @@ const ChooseARoleParent = styled.div`
   justify-content: space-between;
   padding-top: var(--padding-24);
   padding-bottom: var(--padding-32);
-  font-size: var(--font-size-21xl);
+  font-size: var(--font-size-40);
   color: var(--blue);
 `
 const ChooseUserRoot = styled.div`
@@ -110,7 +111,7 @@ const ChooseUserRoot = styled.div`
   align-items: center;
   justify-content: flex-start;
   text-align: left;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-16);
   color: #fff;
   font-family: var(--font-exo);
 `
@@ -120,18 +121,20 @@ export const Home = () => {
     <ChooseUserRoot>
       <ChooseARoleParent>
         <ChooseARole>Choose a Role</ChooseARole>
-        <RoleCard>
-          <Creators1Icon alt="" src={FanImage} />
-          <FanParent>
-            <Logo1>Fan</Logo1>
-            <YouWillUpload>
-              You will upload content and will get rewarded for contributing
-            </YouWillUpload>
-          </FanParent>
-          <JoinButton>
-            <Logo1>Join as a Fan</Logo1>
-          </JoinButton>
-        </RoleCard>
+        <Link to="/event-dashboard">
+          <RoleCard>
+            <Creators1Icon alt="" src={FanImage} />
+            <FanParent>
+              <Logo1>Fan</Logo1>
+              <YouWillUpload>
+                You will upload content and will get rewarded for contributing
+              </YouWillUpload>
+            </FanParent>
+            <JoinButton>
+              <Logo1>Join as a Fan</Logo1>
+            </JoinButton>
+          </RoleCard>
+        </Link>
         <RoleCard1>
           <Creators1Icon alt="" src={OrganiserImage} />
           <FanParent>

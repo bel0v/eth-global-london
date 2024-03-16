@@ -84,9 +84,10 @@ export const GlobalStyles = createGlobalStyle`
   --font-exo: "Exo", sans-serif;
 
   /* font sizes */
-  --font-size-5xl: 24px;
-  --font-size-base: 16px;
-  --font-size-21xl: 40px;
+  --font-size-12: 12px;
+  --font-size-16: 16px;
+  --font-size-24: 24px;
+  --font-size-40: 40px;
 
   /* Colors */
   --pearl: #f1f1f1;
@@ -95,7 +96,7 @@ export const GlobalStyles = createGlobalStyle`
   --blue: #0c0b49;
 
   /* Gaps */
-  --gap-5xs: 8px;
+  --gap-8: 8px;
 
   /* Paddings */
   --padding-8: 8px;
@@ -105,7 +106,47 @@ export const GlobalStyles = createGlobalStyle`
   --padding-32: 32px;
 
   /* Border radiuses */
-  --br-5xl: 24px;
-  --br-5xs: 8px;
+  --br-24: 24px;
+  --br-8: 8px;
+
+  /* TO UPDATE */
+
+  /* font sizes */
+--font-size-5xl: 24px;
+--font-size-base: 16px;
+--font-size-21xl: 40px;
+--font-size-xs: 12px;
+
+/* Colors */
+--bg-warm-light: #f9f1f1;
+--pearl: #f1f1f1;
+--bg-warm-light-80: rgba(249, 241, 241, 0.8);
+--bg-cold: #d5d7e1;
+--blue: #0c0b49;
+--color-white: #fff;
+--bg-warm-bold: #c1a9a4;
+--color-black: #000;
+
+/* Gaps */
+--gap-5xs: 8px;
+--gap-9xs: 4px;
+--gap-5xl: 24px;
+--gap-3xs: 10px;
+
+/* Paddings */
+--padding-5xl: 24px;
+--padding-xs: 12px;
+--padding-5xs: 8px;
+--padding-base: 16px;
+--padding-3xs: 10px;
+--padding-9xs: 4px;
+
+/* Border radiuses */
+--br-5xl: 24px;
+--br-5xs: 8px;
+--br-81xl: 100px;
+--br-base: 16px;
+
+
 }
 `
