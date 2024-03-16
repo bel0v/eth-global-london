@@ -126,6 +126,7 @@ const ChooseAnEventParent = styled.div`
 
 const EventDashboardRoot = styled.div`
   width: 100%;
+  padding-top: 40px;
   padding-bottom: 110px;
   position: relative;
   background-color: var(--pearl);

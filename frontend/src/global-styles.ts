@@ -128,6 +128,7 @@ export const GlobalStyles = createGlobalStyle`
 --color-white: #fff;
 --bg-warm-bold: #c1a9a4;
 --color-black: #000;
+--color-blueviolet: #9747ff;
 --active: #00fb0a;
 --color-mediumorchid: #e64bd6;
 --bg-warm: #e1d7d5;
@@ -153,6 +154,7 @@ export const GlobalStyles = createGlobalStyle`
 --br-5xs: 8px;
 --br-81xl: 100px;
 --br-base: 16px;
+--br-8xs: 5px;
 --br-13xl: 32px;
 
 }

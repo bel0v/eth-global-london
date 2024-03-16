@@ -96,6 +96,7 @@ const ChooseARoleParent = styled.div`
 const ChooseUserRoot = styled.div`
   width: 100%;
   position: relative;
+  padding-top: 40px;
   background-color: var(--pearl);
   display: flex;
   flex-direction: column;
