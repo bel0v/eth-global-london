@@ -1,1 +1,29 @@
 .DS_Store
+node_modules
+.env
+
+# Hardhat files
+/cache
+/artifacts
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
+
+# python env
+Scripts
+Lib
+Include
+pyvenv.cfg
+__pycache__
+share
+
+# Test Assets
+test_images
+words.zip
+*.log
+.vscode/launch.json
