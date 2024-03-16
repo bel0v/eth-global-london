@@ -9,9 +9,9 @@ async function add(
     eventId: string;
     name: string;
     venueImageURI: string;
-    maxSupply: bigint;
+    participantsLimit: bigint; // 5
     rewardToken: string;
-    totalRewardedTokens: bigint;
+    totalReward: bigint;
   }>,
   res: IRes
 ) {
@@ -29,10 +29,10 @@ async function add(
     abi: MomentNFT.abi,
     bytecode: MomentNFT.bytecode as Hex,
     args: [
-      req.body.maxSupply,
+      req.body.participantsLimit,
       account.address,
       req.body.rewardToken,
-      req.body.totalRewardedTokens,
+      req.body.totalReward,
     ],
   });
 

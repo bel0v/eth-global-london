@@ -11,6 +11,7 @@ async function add(
   req: IReq<{
     bountyId: string;
     momentImageEncoded: string; // base64 encoded image
+    userAddress: string;
   }>,
   res: IRes
 ) {
@@ -32,11 +33,7 @@ async function add(
 
   // if(score is good enough)
 
-  const filePath = createNFTJson(
-    momentImageEncoded,
-    score,
-    'Captioin goes here'
-  );
+  const filePath = createNFTJson(momentImageEncoded, score);
   // deploy to filecoin
   const filecoinResponse = await lighthouse.upload(
     filePath,
@@ -65,6 +62,7 @@ async function add(
     momentId: moment.id,
     imageURI,
     score,
+    userAddress: req.body.userAddress,
   });
 }
 

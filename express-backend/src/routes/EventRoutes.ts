@@ -2,9 +2,16 @@ import { db } from '@src/config';
 import { IReq, IRes } from './types/express/misc';
 import HttpStatusCodes from '@src/constants/HttpStatusCodes';
 
-async function add(req: IReq<{ logoImageURI: string }>, res: IRes) {
+async function add(
+  req: IReq<{ eventImage: string; organizerImage: string; date: string }>,
+  res: IRes
+) {
   const eventId = await db.event.create({
-    data: { logoImageURI: req.body.logoImageURI },
+    data: {
+      eventImage: req.body.eventImage,
+      organizerImage: req.body.organizerImage,
+      date: new Date(req.body.date),
+    },
   });
 
   return res.status(HttpStatusCodes.CREATED).json({ eventId });

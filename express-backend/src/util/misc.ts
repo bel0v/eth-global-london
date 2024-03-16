@@ -8,14 +8,13 @@ export function tick(milliseconds: number): Promise<void> {
   });
 }
 
-export function createNFTJson(image: string, score: number, caption: string) {
+export function createNFTJson(image: string, score: number) {
   const jsonObject = {
     name: 'An unforgettable moment',
     description: 'A moment that will last forever',
     image: image,
     attributes: {
       score: score,
-      caption: caption,
     },
   };
 

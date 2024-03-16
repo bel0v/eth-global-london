@@ -1,7 +1,9 @@
 -- CreateTable
 CREATE TABLE "Event" (
     "id" TEXT NOT NULL,
-    "logoImageURI" TEXT NOT NULL,
+    "eventImage" TEXT NOT NULL,
+    "organizerImage" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
 );
@@ -10,7 +12,6 @@ CREATE TABLE "Event" (
 CREATE TABLE "Bounty" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "date" TIMESTAMP(3) NOT NULL,
     "venueImageURI" TEXT NOT NULL,
     "contractAddress" VARCHAR(42) NOT NULL,
     "eventId" TEXT NOT NULL,

@@ -4,7 +4,9 @@ generator client {
 
 model Event {
   id              String   @id @default(uuid())
-  logoImageURI    String
+  eventImage      String
+  organizerImage  String
+  date            DateTime 
   bounties        Bounty[]
 }
 

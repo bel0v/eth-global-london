@@ -16,7 +16,10 @@ const momentRouter = Router();
 
 eventRouter.post(
   Paths.Event.Add,
-  validate(['logoImageURI', 'string', 'body']),
+  validate(
+    ['eventImage', 'string', 'body'],
+    ['organizerImage', 'string', 'body']
+  ),
   EventRoutes.add
 );
 eventRouter.get(Paths.Event.Get, EventRoutes.all);
