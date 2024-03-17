@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum'
 import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { evmNetworks } from './chains'
 const queryClient = new QueryClient()
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       settings={{
         environmentId: '5f13430c-a2bb-413d-bf31-32bc255cf632',
         walletConnectors: [EthereumWalletConnectors],
+        evmNetworks,
       }}
     >
       <QueryClientProvider client={queryClient}>

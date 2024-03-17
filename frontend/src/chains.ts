@@ -1,0 +1,50 @@
+export const evmNetworks = [
+  {
+    blockExplorerUrls: ['https://testnet.chiliscan.com'],
+    chainId: 88882,
+    chainName: 'Spicy Testnet',
+    iconUrls: ['https://app.dynamic.xyz/assets/networks/chiliz.svg'],
+    name: 'Spicy',
+    nativeCurrency: {
+      decimals: 18,
+      name: 'Chiliz',
+      symbol: 'CHZ',
+    },
+    networkId: 88882,
+    rpcUrls: ['https://spicy-rpc.chiliz.com/'],
+    vanityName: 'Chiliz Spicy Testnet',
+  },
+  {
+    blockExplorerUrls: ['https://sepolia.etherscan.io/'],
+    chainId: 421614,
+    chainName: 'Arbitrum Sepolia',
+    iconUrls: ['https://app.dynamic.xyz/assets/networks/arbitrum.svg'],
+    name: 'Arbitrum Sepolia',
+    nativeCurrency: {
+      decimals: 18,
+      name: 'Ether',
+      symbol: 'ETH',
+    },
+    networkId: 421614,
+    rpcUrls: [
+      'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+      'https://sepolia-rollup.arbitrum.io/rpc',
+    ],
+    vanityName: 'Arbitrum Sepolia',
+  },
+  {
+    blockExplorerUrls: ['https://sepolia.basescan.org/'],
+    chainId: 84532,
+    chainName: 'Base Sepolia Testnet',
+    iconUrls: ['https://app.dynamic.xyz/assets/networks/base.svg'],
+    name: 'Base Sepolia',
+    nativeCurrency: {
+      decimals: 18,
+      name: 'Ether',
+      symbol: 'ETH',
+    },
+    networkId: 84532,
+    rpcUrls: ['wss://base-sepolia-rpc.publicnode.com'],
+    vanityName: 'Base Sepolia',
+  },
+]
