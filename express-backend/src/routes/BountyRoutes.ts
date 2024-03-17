@@ -105,18 +105,23 @@ async function get(req: IReq<{ bountyId: string }>, res: IRes) {
       .json({ message: 'Bounty not found' });
   }
 
-  return res
-    .status(HttpStatusCodes.OK)
-    .json({
-      ...bounty,
-      totalReward: bounty.totalReward.toString(),
-      participantsLimit: bounty.participantsLimit.toString(),
-    });
+  return res.status(HttpStatusCodes.OK).json({
+    ...bounty,
+    totalReward: bounty.totalReward.toString(),
+    participantsLimit: bounty.participantsLimit.toString(),
+  });
 }
 
 async function all(req: IReq, res: IRes) {
   const allBounties = await db.bounty.findMany();
-  return res.status(HttpStatusCodes.OK).json(allBounties);
+
+  const allBountiesParsed = allBounties.map((bounty) => ({
+    ...bounty,
+    totalReward: bounty.totalReward.toString(),
+    participantsLimit: bounty.participantsLimit.toString(),
+  }));
+
+  return res.status(HttpStatusCodes.OK).json(allBountiesParsed);
 }
 
 export default {

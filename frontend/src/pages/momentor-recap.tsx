@@ -103,9 +103,8 @@ export const MomentorRecap = () => {
   const allEventBounties = useQuery({
     queryKey: ['bounties', 'all'],
     queryFn: () => {
-      return fetch.get(`/bounty/all`).json<{ bounties: EventBounty[] }>()
+      return fetch.get(`/bounty/all`).json<EventBounty[]>()
     },
-    select: (data) => data.bounties,
   })
 
   return (
@@ -120,7 +119,10 @@ export const MomentorRecap = () => {
         </Clock1Parent>
         <BountiesWrapper>
           {allEventBounties.data?.map((eventBounty) => (
-            <Link to="todo" key={eventBounty.id}>
+            <Link
+              to={`/event-dashboard/${eventBounty.eventId}/${eventBounty.id}`}
+              key={eventBounty.id}
+            >
               <EventBountyCard eventBounty={eventBounty} />
             </Link>
           ))}
