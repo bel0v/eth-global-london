@@ -17,13 +17,11 @@ Momentor aims to motivate users to share their content, thereby enriching the us
 - **Decentralized Data Ownership**: The data is uploaded to filecoin and ipfs with lighthouse.storage thus allowing the event organizers full ownership over monetization and distribution of the data.
 - **Gasless Experience**: We don't require users to send any transaction, except when the organizer has to transfer the reward tokens to the smart contract, thus enriching the user experience and retention to another level.
 
-## Future Implications
-
-Momentor not only revolutionizes the way event organizers interact with and understand their audience but also opens up new avenues for data utilization. Through AI simulations, clubs and venue owners can offer virtual reality previews of seat views, enhance security measures, and tailor events to match audience preferences more closely.
-
 ## How It Works
 
-Momentor integrates seamlessly with existing platforms, requiring minimal setup from both organizers and users. Through a user-friendly interface, participants can upload their content, receive immediate feedback from AI analysis, and earn rewards for their contributions. On the backend, blockchain technology ensures the security and authenticity of data transactions, making Momentor a robust solution for the future of event management and fan engagement.
+Momentor integrates seamlessly with EVM blockchains, requiring minimal setup from both organizers and users. Through a user-friendly interface, participants can upload their content, receive immediate feedback from AI analysis, and earn rewards for their contributions. On the backend, blockchain technology ensures the security and authenticity of data transactions, manages data communication with Filecoin services, making Momentor a robust solution for the future of event management and fan engagement.
+
+On the AI side, we use an image-to-text model to get captions out of the image uploaded by the user. Given the caption and the bounty description we compare the associated vector embeddings to accurately rate the given output.
 
 ## Architecture
 
@@ -31,8 +29,11 @@ Tech Stack:
 
 - **Dynamic.xyz** for wallet connection.
 - Utilizing **lighthouse.storage** for image data.
-- Solidity smart contracts managed by hardhat and deployed on Chiliz, Arbitrum and Base.
+- Solidity smart contracts deployed on **Chiliz, Arbitrum and Base**.
+- Use any token as a reward, including **APE** coin.
+- **Nouns DAO** design assets for UX/UI.
 - React, Express.js and Python for Front-End and Back-end services.
+- Viem for blockchain interaction, hardhat for contracts and prisma for the database.
 
 ![alt text](./architecture.jpg)
 
