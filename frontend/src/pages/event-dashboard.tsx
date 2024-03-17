@@ -166,8 +166,6 @@ const EventCard = ({ event }: { event: Event }) => {
 }
 
 export const EventDashboard = () => {
-  // const events = eventsMock
-
   const fetch = useFetch()
   const eventsQuery = useQuery({
     queryKey: ['events'],

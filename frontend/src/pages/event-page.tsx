@@ -139,6 +139,7 @@ export const EventPage = () => {
     return <div>404</div>
   }
 
+  console.log(eventBounties)
   return (
     <EventPageRoot>
       <Content>

@@ -1,8 +1,9 @@
 import styled from 'styled-components'
-import { type Event, type EventBounty } from '../data/types'
+import { Moment, type Event, type EventBounty } from '../data/types'
 import { Tag } from './tag'
 import { BountyParticipants } from './bounty-participants'
-import { eventsMock } from '../data/events-mock'
+import { useQuery } from '@tanstack/react-query'
+import { useFetch } from '../hooks/use-fetch'
 
 const EventTypeIcon = styled.img`
   width: 40px;
@@ -143,13 +144,33 @@ export const EventBountyCard = ({
   event?: Event
   eventBounty: EventBounty
 }) => {
-  const eventObject =
-    event ?? eventsMock.find((event) => event.id === eventBounty.eventId)
-  const isComplete = eventBounty.moments.length === eventBounty.participantsLimit
+  const fetch = useFetch()
+
+  const eventQuery = useQuery({
+    queryKey: ['events', eventBounty.eventId],
+    queryFn: () => {
+      return fetch.get(`/event/${eventBounty.eventId}`).json<Event>()
+    },
+  })
+
+  const eventBountyMoments = useQuery({
+    queryKey: ['event-bounty', eventBounty.id, 'moments'],
+    queryFn: () => {
+      return fetch.get(`/bounty/${eventBounty.id}/moments`).json<{ moments: Moment[] }>()
+    },
+    select: (data) => data.moments,
+  })
+
+  if (eventBountyMoments.isPending || eventBountyMoments.isError) {
+    return null
+  }
+
+  const eventObject = event ?? eventQuery.data
+  const isComplete = eventBountyMoments.data.length === eventBounty.participantsLimit
 
   return (
     <EventCardWrapper>
-      <EventTypeParent imageUrl={eventBounty.background}>
+      <EventTypeParent imageUrl={eventBounty.venueImageURI}>
         <EventType>
           {eventObject?.icons?.map((icon) => (
             <EventTypeIconWrapper key={icon}>
@@ -163,13 +184,14 @@ export const EventBountyCard = ({
         <EventDescription>
           <EventDateParent>
             <EventDate>
-              <div>{eventBounty.date}</div>
+              <div>{eventQuery.data?.date}</div>
             </EventDate>
-            <EventBountyReward>
+            TODO REWARD
+            {/* <EventBountyReward>
               <RewardCoinsIcon alt="" src={eventBounty.reward.icon} />
               <div>{eventBounty.reward.value}</div>
               <b>{eventBounty.reward.token}</b>
-            </EventBountyReward>
+            </EventBountyReward> */}
           </EventDateParent>
           <ManchesterFirstGoal>{eventBounty.name}</ManchesterFirstGoal>
         </EventDescription>

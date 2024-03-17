@@ -1,9 +1,11 @@
 import styled from 'styled-components'
-import { eventBountiesMock } from '../data/events-mock'
 import { Link } from 'react-router-dom'
 import { EventBountyCard } from '../components/event-bounty-card'
 import RecapMainImage1 from '../images/recap-main-1.png'
 import RecapMainImage2 from '../images/recap-main-2.png'
+import { useFetch } from '../hooks/use-fetch'
+import { useQuery } from '@tanstack/react-query'
+import { EventBounty } from '../data/types'
 
 const Clock1Icon = styled.img`
   width: 220px;
@@ -97,7 +99,15 @@ const BountiesWrapper = styled.div`
 `
 
 export const MomentorRecap = () => {
-  const allEventBounties = eventBountiesMock
+  const fetch = useFetch()
+  const allEventBounties = useQuery({
+    queryKey: ['bounties', 'all'],
+    queryFn: () => {
+      return fetch.get(`/bounty/all`).json<{ bounties: EventBounty[] }>()
+    },
+    select: (data) => data.bounties,
+  })
+
   return (
     <RecapRoot>
       <FrameParent1>
@@ -109,7 +119,7 @@ export const MomentorRecap = () => {
           <Image1Icon alt="" src={RecapMainImage2} />
         </Clock1Parent>
         <BountiesWrapper>
-          {allEventBounties.map((eventBounty) => (
+          {allEventBounties.data?.map((eventBounty) => (
             <Link to="todo" key={eventBounty.id}>
               <EventBountyCard eventBounty={eventBounty} />
             </Link>

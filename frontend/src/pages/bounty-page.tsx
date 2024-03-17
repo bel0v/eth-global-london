@@ -1,12 +1,15 @@
 import styled from 'styled-components'
 import { BountyParticipants } from '../components/bounty-participants'
-import { eventBountiesMock, eventsMock } from '../data/events-mock'
 import { useParams } from 'react-router-dom'
 import IconAddPhoto from '../images/icons/icon-photo-add.svg'
 import NoImageIcon from '../images/icons/no-image-icon.svg'
 import { FileUploadInput } from '../components/file-upload-input'
 import { BackButton } from '../components/back-button'
 import { fileToBase64 } from '../helpers/data'
+import { useQuery } from '@tanstack/react-query'
+import { useFetch } from '../hooks/use-fetch'
+import { Event, EventBounty, Moment } from '../data/types'
+import { LoadingStatus } from '../components/loading-status'
 
 const FrameItem = styled.img`
   width: 40px;
@@ -254,14 +257,42 @@ const BountyPageRoot = styled.div`
 `
 
 export const BountyPage = () => {
-  const params = useParams<{ bountyId: string }>()
-  const eventBounty = eventBountiesMock.find((event) => event.id === params.bountyId)
+  const { bountyId } = useParams<{ bountyId: string }>()
+  const fetch = useFetch()
 
-  if (eventBounty === undefined) {
+  const eventBounty = useQuery({
+    queryKey: ['event-bounty', bountyId],
+    queryFn: () => {
+      return fetch.get(`/bounty/${bountyId}/moments`).json<EventBounty>()
+    },
+  })
+
+  const eventQuery = useQuery({
+    queryKey: ['events', eventBounty.data?.eventId],
+    queryFn: () => {
+      return fetch.get(`/event/${eventBounty.data?.eventId}`).json<Event>()
+    },
+    enabled: eventBounty.data !== undefined,
+  })
+
+  const eventBountyMoments = useQuery({
+    queryKey: ['event-bounty', bountyId, 'moments'],
+    queryFn: () => {
+      return fetch.get(`/bounty/${bountyId}/moments`).json<{ moments: Moment[] }>()
+    },
+    select: (data) => data.moments,
+  })
+
+  if (eventBounty.isPending || eventBountyMoments.isPending) {
+    return <LoadingStatus />
+  }
+
+  if (eventBounty.isError || eventBountyMoments.isError) {
     return <div>404</div>
   }
-  const event = eventsMock.find((event) => event.id === eventBounty.eventId)
-  const freeSeatsNumber = eventBounty.participantsLimit - eventBounty.moments.length
+
+  const freeSeatsNumber =
+    eventBounty.data.participantsLimit - eventBountyMoments.data.length
 
   const onFileDrop = async (files: File[]) => {
     const file = files[0]
@@ -271,10 +302,10 @@ export const BountyPage = () => {
 
   return (
     <BountyPageRoot>
-      <BackgroundWrapper imageUrl={eventBounty.background}>
-        <BackButton to={`/event-dashboard/${eventBounty.eventId}`} />
+      <BackgroundWrapper imageUrl={eventBounty.data.venueImageURI}>
+        <BackButton to={`/event-dashboard/${eventBounty.data.eventId}`} />
         <EventType>
-          {event?.icons?.map((icon) => (
+          {eventQuery.data?.icons?.map((icon) => (
             <EventTypeInner>
               <FrameItem alt="" src={icon} />
             </EventTypeInner>
@@ -283,22 +314,23 @@ export const BountyPage = () => {
       </BackgroundWrapper>
       <FrameContainer>
         <SundayMarch172024Parent>
-          <Active>{eventBounty.date}</Active>
+          <Active>{eventQuery.data?.date}</Active>
           <ActiveUnactive>
             <Active>Active</Active>
             <ActiveUnactiveChild />
           </ActiveUnactive>
         </SundayMarch172024Parent>
-        <ManchesterFirstGoal>{eventBounty.name}</ManchesterFirstGoal>
+        <ManchesterFirstGoal>{eventBounty.data.name}</ManchesterFirstGoal>
         <FrameDiv>
-          <BountyParticipants eventBounty={eventBounty} />
-          <RewardCoinsParent>
+          <BountyParticipants eventBounty={eventBounty.data} />
+          TODO REWARDS
+          {/* <RewardCoinsParent>
             <RewardCoinsIcon alt="" src={eventBounty.reward.icon} />
             <Active>{eventBounty.reward.value} tokens to grab</Active>
-          </RewardCoinsParent>
+          </RewardCoinsParent> */}
         </FrameDiv>
         <FrameParent>
-          {eventBounty.moments.map((moment) => (
+          {eventBountyMoments.data.map((moment) => (
             <FrameWrapper>
               <Fan11Wrapper>
                 <Fan11Icon alt="" src={moment.image} />
@@ -310,8 +342,8 @@ export const BountyPage = () => {
             <PhotoParent key={index}>
               <PhotoIcon alt="" src={NoImageIcon} />
               <Parent1>
-                <Active>{eventBounty.moments.length + index + 1} of</Active>
-                <b>{eventBounty.participantsLimit}</b>
+                <Active>{eventBountyMoments.data.length + index + 1} of</Active>
+                <b>{eventBounty.data.participantsLimit}</b>
               </Parent1>
               <HereCouldBe>Here could be yours</HereCouldBe>
             </PhotoParent>

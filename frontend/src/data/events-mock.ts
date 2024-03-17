@@ -8,25 +8,19 @@ import RewardEthImage from '../images/events/reward-eth.jpg'
 import RewardFanImage from '../images/events/reward-fan.jpg'
 import BountyBg1 from '../images/events/bounty-bg-1.jpg'
 // import TokenApeImage from '../images/tokens/token-ape.jpg'
-import TokenUSDCImage from '../images/tokens/token-usdc.jpg'
-import TokenManImage from '../images/tokens/token-man.jpg'
 import EventIcon1 from '../images/events/event-icon-1.png'
 import EventIcon2 from '../images/events/event-icon-2.png'
 
 import { Event, EventBounty } from './types'
+import { knownTokens } from './known-tokens'
 
 export const eventBountiesMock: EventBounty[] = [
   {
     eventId: '1',
     id: '11',
     name: 'Manchester first goal',
-    date: '03/17/24',
-    reward: {
-      token: '$USDC',
-      value: '200.1',
-      icon: TokenUSDCImage,
-    },
-
+    rewardToken: knownTokens[0].address,
+    totalReward: '123',
     participantsLimit: 5,
     tag: 'goal',
     venueImageURI: BountyBg1,
@@ -36,12 +30,8 @@ export const eventBountiesMock: EventBounty[] = [
     id: '12',
     name: 'Julian Álvarez - Corner Kick',
     tag: 'corner-kick',
-    date: '03/17/24',
-    reward: {
-      token: '$MAN',
-      value: '500',
-      icon: TokenManImage,
-    },
+    rewardToken: knownTokens[1].address,
+    totalReward: '342.23',
     participantsLimit: 5,
     venueImageURI: undefined,
   },

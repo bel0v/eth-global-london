@@ -1,18 +1,18 @@
 import styled from 'styled-components'
 import StadiumImage from '../images/stadium.svg'
 import { BackButton } from '../components/back-button'
-import { eventsMock } from '../data/events-mock'
 import { useParams } from 'react-router-dom'
 import { FileUploadInput } from '../components/file-upload-input'
 import { fileToBase64 } from '../helpers/data'
-import { EveryTagName, TagName } from '../data/types'
+import { Event, EveryTagName, TagName } from '../data/types'
 import { Tag } from '../components/tag'
 import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useFetch } from '../hooks/use-fetch'
 import * as Popover from '@radix-ui/react-popover'
 import { knownTokens } from '../data/known-tokens'
 import { useDecimalNumberRifm } from '../hooks/use-decimal-number-rifm'
+import { parseEther } from 'viem'
 
 const StadiumIcon = styled.img`
   width: 200px;
@@ -207,6 +207,10 @@ const FrameContainer = styled.div`
   color: var(--bg-warm);
 `
 const CreateBountyButton = styled.button`
+  &[aria-disabled='true'] {
+    opacity: 0.8;
+    cursor: auto;
+  }
   border-radius: var(--br-81xl);
   background: linear-gradient(95.52deg, #ffd19b, #fd97ff);
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
@@ -252,18 +256,27 @@ const everyTag = [
 ] satisfies EveryTagName
 
 type CreateBountyPayload = {
+  userWalletAddress: string
   eventId: string
   name: string
   venueImageURI: string
-  participantsLimit: bigint // 5
+  participantsLimit: string // bigint
   rewardToken: string
-  totalReward: bigint
+  totalReward: string // bigint
   tag: string
 }
 
+const approvalAddress = '0x5074E1bb5Dd9A5CF8ADaB7891427dc6C2542e467'
+
 export const CreateBountyPage = () => {
   const { eventId } = useParams<{ eventId: string }>()
-  const event = eventsMock.find((event) => event.id === eventId)
+  const eventQuery = useQuery({
+    queryKey: ['events', eventId],
+    queryFn: () => {
+      return fetch.get(`/event/${eventId}`).json<Event>()
+    },
+  })
+
   const [activeTag, setActiveTag] = useState<TagName>()
   const [venueImageURI, setVenueImageURI] = useState<string>()
   const [name, setName] = useState<string>('')
@@ -288,6 +301,13 @@ export const CreateBountyPage = () => {
     onChange: setTotalReward,
   })
 
+  const canSubmit =
+    eventId !== undefined &&
+    name.trim().length > 0 &&
+    venueImageURI !== undefined &&
+    totalReward.trim().length > 0 &&
+    activeTag !== undefined
+
   return (
     <CreateDetailsRoot>
       <StadiumParent $imageUrl={venueImageURI}>
@@ -295,8 +315,8 @@ export const CreateBountyPage = () => {
         <FrameParent>
           <BackButton to={`/event-dashboard`} />
           <EventType>
-            {event?.icons?.map((icon) => (
-              <EventTypeInner>
+            {eventQuery.data?.icons?.map((icon) => (
+              <EventTypeInner key={icon}>
                 <FrameItem alt="" src={icon} />
               </EventTypeInner>
             ))}
@@ -346,6 +366,7 @@ export const CreateBountyPage = () => {
                 <DropdownWrapper>
                   {knownTokens.map((token) => (
                     <button
+                      key={token.ticker}
                       onClick={() => {
                         setToken(token)
                         setTokenSelectOpen(false)
@@ -368,16 +389,23 @@ export const CreateBountyPage = () => {
         </FrameContainer>
       </AddTitleParent>
       <CreateBountyButton
-        onClick={() => {
-          // todo:validate all necessary fields
-          console.log({
+        disabled={!canSubmit || createBounty.isPending}
+        aria-disabled={!canSubmit}
+        onClick={async () => {
+          if (!canSubmit) {
+            return
+          }
+          const payload: CreateBountyPayload = {
             eventId,
             name,
             venueImageURI,
-            // rewardToken: string
-            // totalReward: bigint
+            rewardToken: token.address,
+            totalReward: parseEther(totalReward).toString(),
             tag: activeTag,
-          })
+            participantsLimit: BigInt(5).toString(),
+          }
+          const result = await createBounty.mutateAsync(payload)
+          console.log(result)
         }}
       >
         <b>Create Bounty</b>

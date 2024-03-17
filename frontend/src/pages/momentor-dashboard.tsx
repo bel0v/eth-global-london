@@ -6,8 +6,7 @@ import { Indicator } from '../components/indicator'
 import { useFetch } from '../hooks/use-fetch'
 import { useQuery } from '@tanstack/react-query'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
-import { WalletData } from '../data/types'
-import { eventBountiesMock } from '../data/events-mock'
+import { EventBounty } from '../data/types'
 
 const Fan11Icon = styled.img`
   width: 200px;
@@ -88,12 +87,6 @@ export const MomentorDashboard = () => {
   const { primaryWallet } = useDynamicContext()
   const fetch = useFetch()
 
-  const walletData: WalletData = {
-    bounties: eventBountiesMock,
-    avatar: '',
-    address: 'admekmlka',
-  }
-
   const walletAvatar = useQuery({
     queryKey: ['wallet-avatar', primaryWallet?.address],
     queryFn: () => {
@@ -104,17 +97,18 @@ export const MomentorDashboard = () => {
     enabled: Boolean(primaryWallet),
   })
 
-  // const walletBounties = useQuery({
-  //   queryKey: ['wallet-bounties', primaryWallet?.address],
-  //   queryFn: () => {
-  //     return fetch
-  //       .get(`/user/${primaryWallet?.address}/bounties`)
-  //       .json<{ avatar: string }>()
-  //   },
-  //   enabled: Boolean(primaryWallet),
-  // })
+  const walletBounties = useQuery({
+    queryKey: ['wallet-bounties', primaryWallet?.address],
+    queryFn: () => {
+      return fetch
+        .get(`/user/${primaryWallet?.address}/bounties`)
+        .json<{ bounties: EventBounty[] }>()
+    },
+    select: (data) => data.bounties,
+    enabled: Boolean(primaryWallet),
+  })
 
-  // console.log(allBounties.data)
+  const userBounties = walletBounties.data ?? []
 
   return (
     <FanDashboardRoot>
@@ -129,18 +123,16 @@ export const MomentorDashboard = () => {
             <Active>Active</Active>
             <Indicator size={10} />
           </ActiveParent>
-          <Bounties>
-            {pluralize(walletData.bounties.length, 'bounty', 'bounties')}
-          </Bounties>
+          <Bounties>{pluralize(userBounties.length, 'bounty', 'bounties')}</Bounties>
         </FrameParent>
       </Hero>
-      {walletData.bounties.length > 0 && (
+      {userBounties.length > 0 && (
         <BountiesList>
           <ActiveParent>
             <b>Active</b>
             <Indicator size={16} />
           </ActiveParent>
-          {walletData.bounties.map((eventBounty) => (
+          {userBounties.map((eventBounty) => (
             <Link
               to={`/event-dashboard/${eventBounty.eventId}/${eventBounty.id}`}
               key={eventBounty.id}

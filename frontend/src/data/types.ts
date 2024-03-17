@@ -11,15 +11,11 @@ export type EventBounty = {
   id: string
   eventId: string
   name: string
-  date: string
+  // date: string // todo:take from event
   venueImageURI?: string
-  tag?: TagName //
-  reward: {
-    token: string
-    value: string //number string
-    icon: string
-  }
-  // moments: Moment[] // query separately
+  tag: TagName //
+  rewardToken: string //token address
+  totalReward: string
   participantsLimit: number
 }
 
