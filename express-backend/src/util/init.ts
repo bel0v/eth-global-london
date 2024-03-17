@@ -2,8 +2,6 @@ import { db } from '@src/config';
 import fs from 'fs';
 
 export async function initEvents() {
-  await db.event.deleteMany({});
-
   for (let i = 1; i <= 3; i++) {
     const eventImage =
       'data:image/png;base64,' +
@@ -14,6 +12,17 @@ export async function initEvents() {
         __dirname + `/../public/events/organizer-${i}.png`,
         'base64'
       );
+
+    const exists = await db.event.findFirst({
+      where: {
+        eventImage,
+        organizerImage,
+      },
+    });
+
+    if (exists) {
+      continue;
+    }
 
     console.log('event', i);
 

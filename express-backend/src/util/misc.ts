@@ -21,6 +21,10 @@ export function getNoun(seed: Address) {
   return 'data:image/png;base64,' + image;
 }
 
+export function stripBase64Prefix(base64: string) {
+  return base64.split(',')[1];
+}
+
 export function createNFTJson(image: string, score: number) {
   const jsonObject = {
     name: 'An unforgettable moment',
