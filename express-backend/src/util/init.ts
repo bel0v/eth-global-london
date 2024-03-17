@@ -28,11 +28,7 @@ export async function initEvents() {
             __dirname + `/../public/events/arsanal.png`,
             'base64'
           ),
-        'data:image/png;base64,' +
-          fs.readFileSync(
-            __dirname + `/../public/events/event-2.png`,
-            'base64'
-          ),
+        eventImage,
       ];
     }
 

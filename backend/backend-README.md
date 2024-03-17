@@ -13,11 +13,11 @@ We will also need a backend database that stores event tags and NFT contract add
 Install the docker image
 
 ```bash
-docker pull abhijoshi/imagemodel_momentor:v1.0
+docker pull abhijoshi/imagemodel_momentor:v1.2
 ```
 
 Run the docker container:
 
 ```bash
-docker run -p 8000:8000 --env-file .env --name imageservice abhijoshi/imagemodel_momentor:v1.0
+docker run -p 8000:8000 --env-file .env --name imageservice abhijoshi/imagemodel_momentor:v1.2
 ```
