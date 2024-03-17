@@ -27,7 +27,12 @@ Momentor integrates seamlessly with existing platforms, requiring minimal setup 
 
 ## Architecture
 
-TODO: Tech stack
+Tech Stack:
+
+- **Dynamic.xyz** for wallet connection.
+- Utilizing **lighthouse.storage** for image data.
+- Solidity smart contracts managed by hardhat and deployed on Chiliz, Arbitrum and Base.
+- React, Express.js and Python for Front-End and Back-end services.
 
 ![alt text](./architecture.jpg)
 
