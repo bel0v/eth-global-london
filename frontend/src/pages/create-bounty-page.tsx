@@ -182,7 +182,8 @@ const FrameDiv = styled.div`
   align-items: center;
   gap: var(--gap-3xs);
 `
-const ApproveWrapper = styled.div`
+const ApproveButton = styled.button`
+  font-size: 16px;
   align-self: stretch;
   border-radius: 4px;
   background-color: var(--bg-warm);
@@ -361,9 +362,9 @@ export const CreateBountyPage = () => {
             </Popover.Root>
             <TitleInput inputMode="numeric" {...rewardRifm} />
           </FrameDiv>
-          <ApproveWrapper>
+          <ApproveButton>
             <b>Approve</b>
-          </ApproveWrapper>
+          </ApproveButton>
         </FrameContainer>
       </AddTitleParent>
       <CreateBountyButton
