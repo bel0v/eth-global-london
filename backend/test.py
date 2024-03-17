@@ -7,7 +7,7 @@ import logging
 logger.setLevel(logging.DEBUG)
 
 URL = "http://localhost:8000/getScore/"
-PROMPT = "Dog eating a cake"
+PROMPT = "People playing football"
 CWD = Path.cwd()
 IMAGE_DIR = CWD / "test_images"
 image = "corner-kick.jpg"

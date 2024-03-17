@@ -5,7 +5,6 @@ import base64
 load_dotenv()
 from utils import logger
 import time
-from gradio_client import Client, file
 SEMANTIC_BACKOFF=os.environ.get("SEMANTIC_BACKOFF",2)
 SEMANTIC_RETRIES=os.environ.get("SEMANTIC_RETRIES",10)
 
