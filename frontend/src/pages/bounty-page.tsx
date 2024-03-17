@@ -392,7 +392,7 @@ export const BountyPage = () => {
           </RewardCoinsParent>
         </FrameDiv>
 
-        {(isParticipating || isOrganiser) && (
+        {eventBountyMoments.data.length > 0 && (isParticipating || isOrganiser) && (
           <Leaderboard eventBounty={eventBounty.data} />
         )}
 
