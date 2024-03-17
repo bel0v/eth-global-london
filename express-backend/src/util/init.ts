@@ -20,6 +20,22 @@ export async function initEvents() {
       },
     });
 
+    let teamIcons: string[] = [];
+    if (i === 2) {
+      teamIcons = [
+        'data:image/png;base64,' +
+          fs.readFileSync(
+            __dirname + `/../public/events/arsanal.png`,
+            'base64'
+          ),
+        'data:image/png;base64,' +
+          fs.readFileSync(
+            __dirname + `/../public/events/event-2.png`,
+            'base64'
+          ),
+      ];
+    }
+
     if (exists) {
       continue;
     }
@@ -30,6 +46,7 @@ export async function initEvents() {
       data: {
         eventImage,
         organizerImage,
+        teamIcons,
         date: new Date(),
       },
     });

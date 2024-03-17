@@ -3,13 +3,19 @@ import { IReq, IRes } from './types/express/misc';
 import HttpStatusCodes from '@src/constants/HttpStatusCodes';
 
 async function add(
-  req: IReq<{ eventImage: string; organizerImage: string; date: string }>,
+  req: IReq<{
+    eventImage: string;
+    organizerImage: string;
+    date: string;
+    teamIcons?: string[];
+  }>,
   res: IRes
 ) {
   const event = await db.event.create({
     data: {
       eventImage: req.body.eventImage,
       organizerImage: req.body.organizerImage,
+      teamIcons: req.body.teamIcons,
       date: new Date(req.body.date),
     },
   });
@@ -29,8 +35,6 @@ async function get(req: IReq<{ eventId: string }>, res: IRes) {
       id: req.params.eventId,
     },
   });
-
-  console.log(event);
 
   if (!event) {
     return res

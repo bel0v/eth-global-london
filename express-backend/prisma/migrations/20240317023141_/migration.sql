@@ -4,6 +4,7 @@ CREATE TABLE "Event" (
     "eventImage" TEXT NOT NULL,
     "organizerImage" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
+    "teamIcons" TEXT[] DEFAULT ARRAY[]::TEXT[],
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
 );
