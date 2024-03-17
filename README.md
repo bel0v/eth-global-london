@@ -21,7 +21,7 @@ Momentor aims to motivate momenters to share their content, thereby enriching th
 
 Momentor integrates seamlessly with EVM blockchains, requiring minimal setup from both organizers and users. Through a user-friendly interface, participants can upload their content, receive immediate feedback from AI analysis, and earn rewards for their contributions. On the backend, blockchain technology ensures the security and authenticity of data transactions, manages data communication with Filecoin services, making Momentor a robust solution for the future of event management and fan engagement.
 
-On the AI side, we use an image-to-text model to get captions out of the image uploaded by the user. Given the caption and the bounty description we compare the associated vector embeddings to accurately rate the given output.
+On the AI side, we use an image-to-text model to generate captions out of the image uploaded by the user. Given the caption and the bounty description, we compare the associated vector embeddings to accurately rate the image in terms of relevancy to the bounty before uploading the image to Filecoin using Lighthouse. This means that we are able to generate high quality, labelled training data for the event organizers, which they could then use to understand the fan experience, charactirize their fans to better cater to their interests, or even generate virtual media of the event in the future.
 
 ## Architecture
 
@@ -34,6 +34,7 @@ Tech Stack:
 - **Nouns DAO** design assets for UX/UI.
 - React, Express.js and Python for Front-End and Back-end services.
 - Viem for blockchain interaction, hardhat for contracts and prisma for the database.
+- 'MiniLM-L6-v2' and 'vit-gpt2-image-captioning' based opensource AI models for sentiment analysis and captioning respecitvely
 
 ![alt text](./architecture.jpg)
 
