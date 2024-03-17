@@ -44,7 +44,7 @@ export const evmNetworks = [
       symbol: 'ETH',
     },
     networkId: 84532,
-    rpcUrls: ['wss://base-sepolia-rpc.publicnode.com'],
+    rpcUrls: ['https://rpc.notadegen.com/base/sepolia'],
     vanityName: 'Base Sepolia',
   },
 ]

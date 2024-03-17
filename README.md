@@ -31,6 +31,21 @@ TODO: Tech stack
 
 ![alt text](./architecture.jpg)
 
+Deployments:
+
+- Chiliz Spicy Testnet:
+  - MomentNFT: `0x71d13A1066091550fd0988B4FD8887EAc26839b7`
+  - MomentFactory: `0x2C1595753E98049166346e4F209B80c6fb64e8Ab`
+  - MockERC20: `0x6975cA53289FBe4c1d7D123593e0CD7dB2339808`
+- Arbitrum Sepolia Testnet:
+  - MomentNFT: `0xd1637946d430f0054Cbb39b5Ea83AC34C5C78b6c`
+  - MomentFactory: `0xd7b212E3422113f2C76ab83554FF1b89A8EE66E6`
+  - MockERC20: `0xf8f9D2C67f56A3A765b8468e91d82933D1F10a52`
+- Base Sepolia Testnet:
+  - MomentNFT: `0xd1637946d430f0054Cbb39b5Ea83AC34C5C78b6c`
+  - MomentFactory: `0xd7b212E3422113f2C76ab83554FF1b89A8EE66E6`
+  - MockERC20: `0xf8f9D2C67f56A3A765b8468e91d82933D1F10a52`
+
 ## License
 
 This project is licensed under [MIT License](./LICENSE)
