@@ -261,6 +261,23 @@ const BountyPageRoot = styled.div`
   font-family: var(--font-exo);
 `
 
+const MomentPreview = ({ moment }: { moment: Moment }) => {
+  const fetch = useFetch(null)
+  const momentImage = useQuery({
+    queryKey: ['moment-image', moment.id],
+    queryFn: () => {
+      return fetch.get(`${moment.imageURI}`).json<{ image: string }>()
+    },
+  })
+  return (
+    <FrameWrapper key={moment.id}>
+      <Fan11Wrapper>
+        <Fan11Icon alt="" src={momentImage.data?.image} />
+      </Fan11Wrapper>
+    </FrameWrapper>
+  )
+}
+
 interface CreateMomentPayload {
   bountyId: string
   momentImageEncoded: string
@@ -348,7 +365,7 @@ export const BountyPage = () => {
         <BackButton to={`/event-dashboard/${eventBounty.data.eventId}`} />
         <EventType>
           {eventQuery.data?.teamIcons?.map((icon) => (
-            <EventTypeInner>
+            <EventTypeInner key={icon}>
               <FrameItem alt="" src={icon} />
             </EventTypeInner>
           ))}
@@ -356,7 +373,9 @@ export const BountyPage = () => {
       </BackgroundWrapper>
       <FrameContainer>
         <SundayMarch172024Parent>
-          <Active>{eventQuery.data?.date}</Active>
+          {eventQuery.data && (
+            <Active>{new Date(eventQuery.data.date).toLocaleDateString()}</Active>
+          )}
           <ActiveUnactive>
             <Active>Active</Active>
             <ActiveUnactiveChild />
@@ -379,11 +398,7 @@ export const BountyPage = () => {
 
         <FrameParent>
           {eventBountyMoments.data.map((moment) => (
-            <FrameWrapper>
-              <Fan11Wrapper>
-                <Fan11Icon alt="" src={moment.imageURI} />
-              </Fan11Wrapper>
-            </FrameWrapper>
+            <MomentPreview moment={moment} key={moment.id} />
           ))}
 
           {Array.from(Array(freeSeatsNumber)).map((_, index) => (
