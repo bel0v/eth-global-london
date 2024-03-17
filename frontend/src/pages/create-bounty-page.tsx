@@ -12,7 +12,7 @@ import { useFetch } from '../hooks/use-fetch'
 import * as Popover from '@radix-ui/react-popover'
 import { knownTokens } from '../data/known-tokens'
 import { useDecimalNumberRifm } from '../hooks/use-decimal-number-rifm'
-import { parseEther } from 'viem'
+import { Address, PublicClient, WalletClient, parseEther } from 'viem'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 
 const StadiumIcon = styled.img`
@@ -288,7 +288,45 @@ export const CreateBountyPage = () => {
 
   const publicClient = primaryWallet?.connector.getPublicClient()
   const walletClient = primaryWallet?.connector.getWalletClient(network?.toString())
-  console.log(walletClient)
+
+  async function approveToken() {
+    const publicClientGood = (await publicClient) as PublicClient
+    const walletClientGood = (await walletClient) as WalletClient
+
+    const { request } = await publicClientGood.simulateContract({
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: 'address',
+              name: 'spender',
+              type: 'address',
+            },
+            {
+              internalType: 'uint256',
+              name: 'value',
+              type: 'uint256',
+            },
+          ],
+          name: 'approve',
+          outputs: [
+            {
+              internalType: 'bool',
+              name: '',
+              type: 'bool',
+            },
+          ],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+      ],
+      address: token.address as Address,
+      functionName: 'approve',
+      args: [approvalAddress, parseEther(totalReward)],
+      account: walletClientGood.account,
+    })
+    await walletClientGood.writeContract(request)
+  }
 
   const onFileDrop = async (files: File[]) => {
     const file = files[0]
@@ -390,14 +428,7 @@ export const CreateBountyPage = () => {
             </Popover.Root>
             <TitleInput inputMode="numeric" {...rewardRifm} />
           </FrameDiv>
-          <ApproveButton
-            onClick={async () => {
-              if (publicClient === undefined) {
-                return
-              }
-              // TODO: approve
-            }}
-          >
+          <ApproveButton onClick={approveToken}>
             <b>Approve</b>
           </ApproveButton>
         </FrameContainer>
