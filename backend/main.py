@@ -29,14 +29,14 @@ async def generateScore(score: RelevancyScore):
             "error": None,
             "score": relScore,
             "isRelevant": isRelevant,
-            "msg": f"The image {'is' if isRelevant else 'is not'}. Score {score}"
+            "msg": f"The image {'is' if isRelevant else 'is not'} relevant. Score {relScore}"
         }
     except Exception as e:
         return {
             "status": 404,
             "error": str(e),
-            "score": None,
-            "isRelevant": isRelevant,
+            "score": 0,
+            "isRelevant": False,
             "msg": "An error occurred"
         }
 

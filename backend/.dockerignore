@@ -8,3 +8,4 @@ __pycache__
 *.log
 image_caption.py
 test.py
+Dockerfile
