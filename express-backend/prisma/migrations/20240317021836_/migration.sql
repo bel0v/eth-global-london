@@ -15,6 +15,9 @@ CREATE TABLE "Bounty" (
     "venueImageURI" TEXT NOT NULL,
     "tag" TEXT NOT NULL,
     "contractAddress" VARCHAR(42) NOT NULL,
+    "totalReward" BIGINT NOT NULL,
+    "rewardToken" VARCHAR(42) NOT NULL,
+    "participantsLimit" BIGINT NOT NULL,
     "eventId" TEXT NOT NULL,
 
     CONSTRAINT "Bounty_pkey" PRIMARY KEY ("id")

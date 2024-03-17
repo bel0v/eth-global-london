@@ -9,7 +9,7 @@ async function add(
     eventId: string;
     name: string;
     venueImageURI: string;
-    participantsLimit: bigint; // 5
+    participantsLimit: bigint;
     rewardToken: string;
     totalReward: bigint;
     tag: string;
@@ -52,6 +52,9 @@ async function add(
       contractAddress: momentNFTAddress,
       eventId: req.body.eventId,
       tag: req.body.tag,
+      participantsLimit: req.body.participantsLimit,
+      rewardToken: req.body.rewardToken,
+      totalReward: req.body.totalReward,
     },
   });
 

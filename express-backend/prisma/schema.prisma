@@ -16,6 +16,9 @@ model Bounty {
   venueImageURI   String
   tag             String
   contractAddress String @unique @db.VarChar(42)
+  totalReward     BigInt
+  rewardToken     String @db.VarChar(42)
+  participantsLimit BigInt
   event           Event    @relation(fields: [eventId], references: [id])
   eventId         String
   moments         Moment[]
