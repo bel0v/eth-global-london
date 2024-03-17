@@ -263,6 +263,7 @@ const BountyPageRoot = styled.div`
 
 const MomentPreview = ({ moment }: { moment: Moment }) => {
   const fetch = useFetch(null)
+  const fetchInner = useFetch()
   const momentImage = useQuery({
     queryKey: ['moment-image', moment.id],
     queryFn: () => {
@@ -272,7 +273,9 @@ const MomentPreview = ({ moment }: { moment: Moment }) => {
   const walletAvatar = useQuery({
     queryKey: ['wallet-avatar', moment.walletAddress],
     queryFn: () => {
-      return fetch.get(`/user/${moment.walletAddress}/avatar`).json<{ avatar: string }>()
+      return fetchInner
+        .get(`/user/${moment.walletAddress}/avatar`)
+        .json<{ avatar: string }>()
     },
   })
 
