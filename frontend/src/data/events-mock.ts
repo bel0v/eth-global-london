@@ -41,14 +41,14 @@ export const eventsMock: Event[] = [
   {
     id: '1',
     eventImage: Event1Image,
-    icons: [EventIcon1, EventIcon2],
+    teamIcons: [EventIcon1, EventIcon2],
     organizerImage: RewardFanImage,
     date: new Date().toString(),
   },
   {
     id: '2',
     eventImage: Event2Image,
-    icons: [EventIcon1, EventIcon2],
+    teamIcons: [EventIcon1, EventIcon2],
     organizerImage: RewardEthImage,
     date: new Date().toString(),
   },

@@ -142,7 +142,8 @@ const Fan11Wrapper = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
 `
-const FrameWrapper = styled.div`
+const FrameWrapper = styled.div<{ $imageUrl?: string }>`
+  background-image: url('${(props) => props.$imageUrl}');
   width: 126px;
   border-radius: var(--br-5xs);
   height: 80px;
@@ -154,7 +155,6 @@ const FrameWrapper = styled.div`
   justify-content: flex-start;
   padding: var(--padding-5xs);
   box-sizing: border-box;
-  background-image: url('/frame-30@3x.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top;
@@ -269,11 +269,21 @@ const MomentPreview = ({ moment }: { moment: Moment }) => {
       return fetch.get(`${moment.imageURI}`).json<{ image: string }>()
     },
   })
+  const walletAvatar = useQuery({
+    queryKey: ['wallet-avatar', moment.walletAddress],
+    queryFn: () => {
+      return fetch.get(`/user/${moment.walletAddress}/avatar`).json<{ avatar: string }>()
+    },
+  })
+
+  console.log(walletAvatar.data?.avatar)
   return (
-    <FrameWrapper key={moment.id}>
-      <Fan11Wrapper>
-        <Fan11Icon alt="" src={momentImage.data?.image} />
-      </Fan11Wrapper>
+    <FrameWrapper key={moment.id} $imageUrl={momentImage.data?.image}>
+      {walletAvatar.data && (
+        <Fan11Wrapper>
+          <Fan11Icon alt="" src={walletAvatar.data.avatar} />
+        </Fan11Wrapper>
+      )}
     </FrameWrapper>
   )
 }
