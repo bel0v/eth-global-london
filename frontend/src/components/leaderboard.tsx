@@ -76,6 +76,7 @@ const FrameParent = styled.div`
 `
 const FanLeaderboardParentRoot = styled.div`
   width: 272px;
+  padding-bottom: 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -120,7 +121,9 @@ export const Leaderboard = ({ eventBounty }: { eventBounty: EventBounty }) => {
   const momentsLeaderboard = useQuery({
     queryKey: ['event-bounty', eventBounty.id, 'leaderboard'],
     queryFn: () => {
-      return fetch.get(`/event/${eventBounty.id}`).json<{ sortedMoments: Moment[] }>()
+      return fetch
+        .get(`/bounty/${eventBounty.id}/leaderboard`)
+        .json<{ sortedMoments: Moment[] }>()
     },
     select: (data) => data.sortedMoments,
   })
@@ -142,7 +145,7 @@ export const Leaderboard = ({ eventBounty }: { eventBounty: EventBounty }) => {
             <FrameContainer>
               <Xec24a3Parent>
                 <div>{truncateAddress(moment.walletAddress)}</div>
-                <b>{moment.score / 100}% (To check)</b>
+                <b>{moment.score / 100}%</b>
               </Xec24a3Parent>
               <FrameWrapper>
                 <ProgressInner percentage={moment.score / 100} />

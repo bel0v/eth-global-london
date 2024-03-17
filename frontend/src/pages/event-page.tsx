@@ -129,8 +129,6 @@ export const EventPage = () => {
     select: (data) => data.bounties,
   })
 
-  console.log(eventBountiesQuery.data)
-
   if (eventQuery.status === 'pending') {
     return <LoadingStatus />
   }
