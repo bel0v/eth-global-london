@@ -105,7 +105,13 @@ async function get(req: IReq<{ bountyId: string }>, res: IRes) {
       .json({ message: 'Bounty not found' });
   }
 
-  return res.status(HttpStatusCodes.OK).json(bounty);
+  return res
+    .status(HttpStatusCodes.OK)
+    .json({
+      ...bounty,
+      totalReward: bounty.totalReward.toString(),
+      participantsLimit: bounty.participantsLimit.toString(),
+    });
 }
 
 async function all(req: IReq, res: IRes) {

@@ -13,3 +13,19 @@ export const knownTokens = [
     icon: TokenApeImage,
   },
 ]
+
+export const knownTokensMap: Record<
+  string,
+  { address: string; ticker: string; icon: string }
+> = {
+  '0xF2c97Cb2A5c4B308cc264d9e7c57BB67F4Dca874': {
+    address: '0xF2c97Cb2A5c4B308cc264d9e7c57BB67F4Dca874', //testnet
+    ticker: '$CITY',
+    icon: TokenManImage,
+  },
+  '0x6975cA53289FBe4c1d7D123593e0CD7dB2339808': {
+    address: '0x6975cA53289FBe4c1d7D123593e0CD7dB2339808', // chiliz mock
+    ticker: '$APE',
+    icon: TokenApeImage,
+  },
+}

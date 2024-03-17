@@ -6,12 +6,14 @@ import NoImageIcon from '../images/icons/no-image-icon.svg'
 import { FileUploadInput } from '../components/file-upload-input'
 import { BackButton } from '../components/back-button'
 import { fileToBase64 } from '../helpers/data'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useFetch } from '../hooks/use-fetch'
 import { Event, EventBounty, Moment } from '../data/types'
 import { LoadingStatus } from '../components/loading-status'
 import { Leaderboard } from '../components/leaderboard'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
+import { knownTokensMap } from '../data/known-tokens'
+import { formatEther } from 'viem'
 
 const FrameItem = styled.img`
   width: 40px;
@@ -43,7 +45,7 @@ const EventType = styled.div`
   justify-content: flex-start;
   gap: var(--gap-5xs);
 `
-const BackgroundWrapper = styled.div<{ imageUrl?: string }>`
+const BackgroundWrapper = styled.div<{ $imageUrl?: string }>`
   width: 360px;
   border-radius: 0px 0px var(--br-base) var(--br-base);
   height: 230px;
@@ -55,7 +57,7 @@ const BackgroundWrapper = styled.div<{ imageUrl?: string }>`
   justify-content: space-between;
   padding: 60px var(--padding-xs);
   box-sizing: border-box;
-  background-image: url('${(props) => props.imageUrl}');
+  background-image: url('${(props) => props.$imageUrl}');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top;
@@ -213,6 +215,7 @@ const AddPhotoAlternateIcon = styled.img`
   height: 24px;
 `
 const AddPhotoAlternateParent = styled.div`
+  width: 100%;
   align-self: stretch;
   border-radius: var(--br-81xl);
   background: linear-gradient(95.52deg, #ffd19b, #fd97ff);
@@ -258,15 +261,41 @@ const BountyPageRoot = styled.div`
   font-family: var(--font-exo);
 `
 
+interface CreateMomentPayload {
+  bountyId: string
+  momentImageEncoded: string
+  walletAddress: string
+}
+
+interface CreateMomentResponse {
+  momentId: string
+  jsonURI: string
+  score: number
+  walletAddress: string
+}
+
 export const BountyPage = () => {
   const { bountyId } = useParams<{ bountyId: string }>()
   const fetch = useFetch()
   const { primaryWallet } = useDynamicContext()
+  const queryClient = useQueryClient()
+
+  if (bountyId === undefined) {
+    throw new Error('expected bountyId param')
+  }
+
+  const createMoment = useMutation({
+    mutationFn: (payload: CreateMomentPayload) =>
+      fetch.post('/moment/add', { json: payload }).json<CreateMomentResponse>(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['event-bounty', bountyId, 'moments'] })
+    },
+  })
 
   const eventBounty = useQuery({
     queryKey: ['event-bounty', bountyId],
     queryFn: () => {
-      return fetch.get(`/bounty/${bountyId}/moments`).json<EventBounty>()
+      return fetch.get(`/bounty/${bountyId}`).json<EventBounty>()
     },
   })
 
@@ -300,17 +329,22 @@ export const BountyPage = () => {
   const onFileDrop = async (files: File[]) => {
     const file = files[0]
     const base64string = await fileToBase64(file)
-    console.log(base64string)
+    createMoment.mutate({
+      bountyId,
+      momentImageEncoded: base64string,
+      walletAddress: primaryWallet?.address ?? '',
+    })
   }
 
   const isParticipating = eventBountyMoments.data.some(
     (moment) => moment.walletAddress === primaryWallet?.address
   )
   const isOrganiser = sessionStorage.getItem('mode') === 'organiser'
+  const rewardToken = knownTokensMap[eventBounty.data.rewardToken]
 
   return (
     <BountyPageRoot>
-      <BackgroundWrapper imageUrl={eventBounty.data.venueImageURI}>
+      <BackgroundWrapper $imageUrl={eventBounty.data.venueImageURI}>
         <BackButton to={`/event-dashboard/${eventBounty.data.eventId}`} />
         <EventType>
           {eventQuery.data?.teamIcons?.map((icon) => (
@@ -331,11 +365,12 @@ export const BountyPage = () => {
         <ManchesterFirstGoal>{eventBounty.data.name}</ManchesterFirstGoal>
         <FrameDiv>
           <BountyParticipants eventBounty={eventBounty.data} />
-          TODO REWARDS
-          {/* <RewardCoinsParent>
-            <RewardCoinsIcon alt="" src={eventBounty.reward.icon} />
-            <Active>{eventBounty.reward.value} tokens to grab</Active>
-          </RewardCoinsParent> */}
+          <RewardCoinsParent>
+            <RewardCoinsIcon alt="" src={rewardToken.icon} />
+            <Active>
+              {formatEther(BigInt(eventBounty.data.totalReward))} tokens to grab
+            </Active>
+          </RewardCoinsParent>
         </FrameDiv>
 
         {(isParticipating || isOrganiser) && (
@@ -367,7 +402,7 @@ export const BountyPage = () => {
           aria-label="image upload"
           accept="image/*"
         >
-          <AddPhotoAlternateParent>
+          <AddPhotoAlternateParent aria-disabled={createMoment.isPending}>
             <AddPhotoAlternateIcon alt="" src={IconAddPhoto} />
             <b>Add Image</b>
           </AddPhotoAlternateParent>

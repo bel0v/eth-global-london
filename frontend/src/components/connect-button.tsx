@@ -75,7 +75,6 @@ const UserAvatar = ({ address }: { address: string }) => {
 export const ConnectButton = () => {
   const { isAuthenticated, handleLogOut, primaryWallet } = useDynamicContext()
 
-  console.log(primaryWallet?.address)
   if (isAuthenticated) {
     return (
       <Popover.Root>

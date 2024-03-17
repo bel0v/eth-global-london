@@ -50,7 +50,13 @@ async function bounties(req: IReq<{ eventId: string }>, res: IRes) {
     where: { eventId: req.params.eventId },
   });
 
-  return res.status(HttpStatusCodes.OK).json({ bounties });
+  const parsedBounties = bounties.map((bounty) => ({
+    ...bounty,
+    totalReward: bounty.totalReward.toString(),
+    participantsLimit: bounty.participantsLimit.toString(),
+  }));
+
+  return res.status(HttpStatusCodes.OK).json({ bounties: parsedBounties });
 }
 
 export default { add, all, get, bounties };

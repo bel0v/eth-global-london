@@ -4,6 +4,8 @@ import { Tag } from './tag'
 import { BountyParticipants } from './bounty-participants'
 import { useQuery } from '@tanstack/react-query'
 import { useFetch } from '../hooks/use-fetch'
+import { formatEther } from 'viem'
+import { knownTokensMap } from '../data/known-tokens'
 
 const EventTypeIcon = styled.img`
   width: 40px;
@@ -35,7 +37,7 @@ const EventType = styled.div`
   gap: var(--gap-5xs);
 `
 
-const EventTypeParent = styled.div<{ imageUrl?: string }>`
+const EventTypeParent = styled.div<{ $imageUrl?: string }>`
   width: 320px;
   height: 80px;
   display: flex;
@@ -44,7 +46,7 @@ const EventTypeParent = styled.div<{ imageUrl?: string }>`
   justify-content: space-between;
   padding: var(--padding-xs);
   box-sizing: border-box;
-  background-image: url('${(props) => props.imageUrl}');
+  background-image: url('${(props) => props.$imageUrl}');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -167,10 +169,11 @@ export const EventBountyCard = ({
 
   const eventObject = event ?? eventQuery.data
   const isComplete = eventBountyMoments.data.length === eventBounty.participantsLimit
+  const rewardToken = knownTokensMap[eventBounty.rewardToken]
 
   return (
     <EventCardWrapper>
-      <EventTypeParent imageUrl={eventBounty.venueImageURI}>
+      <EventTypeParent $imageUrl={eventBounty.venueImageURI}>
         <EventType>
           {eventObject?.teamIcons?.map((icon) => (
             <EventTypeIconWrapper key={icon}>
@@ -183,15 +186,16 @@ export const EventBountyCard = ({
       <CardBody>
         <EventDescription>
           <EventDateParent>
-            <EventDate>
-              <div>{eventQuery.data?.date}</div>
-            </EventDate>
-            TODO REWARD
-            {/* <EventBountyReward>
-              <RewardCoinsIcon alt="" src={eventBounty.reward.icon} />
-              <div>{eventBounty.reward.value}</div>
-              <b>{eventBounty.reward.token}</b>
-            </EventBountyReward> */}
+            {eventQuery.data && (
+              <EventDate>
+                <div>{new Date(eventQuery.data.date).toLocaleDateString()}</div>
+              </EventDate>
+            )}
+            <EventBountyReward>
+              <RewardCoinsIcon alt="" src={rewardToken.icon} />
+              <div>{formatEther(BigInt(eventBounty.totalReward))}</div>
+              <b>{rewardToken.ticker}</b>
+            </EventBountyReward>
           </EventDateParent>
           <ManchesterFirstGoal>{eventBounty.name}</ManchesterFirstGoal>
         </EventDescription>

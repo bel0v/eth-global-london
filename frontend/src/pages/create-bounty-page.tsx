@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import StadiumImage from '../images/stadium.svg'
 import { BackButton } from '../components/back-button'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FileUploadInput } from '../components/file-upload-input'
 import { fileToBase64 } from '../helpers/data'
 import { Event, EveryTagName, TagName } from '../data/types'
@@ -187,7 +187,13 @@ const ApproveButton = styled.button`
   font-size: 16px;
   align-self: stretch;
   border-radius: 4px;
-  background-color: var(--bg-warm);
+  transition: background-color 0.2s, border-color 0.2s;
+  background-color: var(--bg-warm-light);
+  border: 1px solid black;
+  &[aria-disabled='true'] {
+    background-color: var(--bg-warm);
+    border: 1px solid transparent;
+  }
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -210,6 +216,7 @@ const FrameContainer = styled.div`
 const CreateBountyButton = styled.button`
   &[aria-disabled='true'] {
     opacity: 0.8;
+    filter: grayscale(50%);
     cursor: auto;
   }
   border-radius: var(--br-81xl);
@@ -278,6 +285,8 @@ export const CreateBountyPage = () => {
     },
   })
 
+  const navigate = useNavigate()
+
   const [activeTag, setActiveTag] = useState<TagName>()
   const [venueImageURI, setVenueImageURI] = useState<string>()
   const [name, setName] = useState<string>('')
@@ -285,7 +294,7 @@ export const CreateBountyPage = () => {
   const [totalReward, setTotalReward] = useState('')
   const [isTokenSelectOpen, setTokenSelectOpen] = useState(false)
   const { primaryWallet, network } = useDynamicContext()
-
+  const [hasApproved, setHasApproved] = useState(false)
   const publicClient = primaryWallet?.connector.getPublicClient()
   const walletClient = primaryWallet?.connector.getWalletClient(network?.toString())
 
@@ -326,6 +335,7 @@ export const CreateBountyPage = () => {
       account: walletClientGood.account,
     })
     await walletClientGood.writeContract(request)
+    setHasApproved(true)
   }
 
   const onFileDrop = async (files: File[]) => {
@@ -337,7 +347,7 @@ export const CreateBountyPage = () => {
 
   const createBounty = useMutation({
     mutationFn: (payload: CreateBountyPayload) =>
-      fetch.post('/bounty/add', { json: payload }),
+      fetch.post('/bounty/add', { json: payload }).json<{ bountyId: string }>(),
   })
 
   const rewardRifm = useDecimalNumberRifm({
@@ -426,16 +436,20 @@ export const CreateBountyPage = () => {
                 </DropdownWrapper>
               </Popover.Content>
             </Popover.Root>
-            <TitleInput inputMode="numeric" {...rewardRifm} />
+            {!hasApproved && <TitleInput inputMode="numeric" {...rewardRifm} />}
           </FrameDiv>
-          <ApproveButton onClick={approveToken}>
-            <b>Approve</b>
+          <ApproveButton
+            onClick={approveToken}
+            disabled={rewardRifm.value.length === 0 || hasApproved}
+            aria-disabled={rewardRifm.value.length === 0 || hasApproved}
+          >
+            {hasApproved ? <b>👌 Approved</b> : <b>Approve</b>}
           </ApproveButton>
         </FrameContainer>
       </AddTitleParent>
       <CreateBountyButton
         disabled={!canSubmit || createBounty.isPending}
-        aria-disabled={!canSubmit}
+        aria-disabled={!canSubmit || createBounty.isPending}
         onClick={async () => {
           if (!canSubmit) {
             return
@@ -450,8 +464,9 @@ export const CreateBountyPage = () => {
             participantsLimit: BigInt(5).toString(),
             userWalletAddress: primaryWallet?.address ?? '',
           }
-          const result = await createBounty.mutateAsync(payload)
-          console.log(result)
+          const { bountyId } = await createBounty.mutateAsync(payload)
+
+          navigate(`/event-dashboard/${eventId}/${bountyId}`)
         }}
       >
         <b>Create Bounty</b>

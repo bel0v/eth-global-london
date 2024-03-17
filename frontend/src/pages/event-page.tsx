@@ -3,10 +3,10 @@ import { EventBountyCard } from '../components/event-bounty-card'
 import { Link, useParams } from 'react-router-dom'
 import CoinImage from '../images/coin-left.png'
 import { Indicator } from '../components/indicator'
+import { LoadingStatus } from '../components/loading-status'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useFetch } from '../hooks/use-fetch'
 import { Event, EventBounty } from '../data/types'
-import { LoadingStatus } from '../components/loading-status'
 
 const CoinLeftIcon = styled.img`
   width: 180px;
@@ -73,7 +73,7 @@ const BountiesWrapper = styled.div`
   padding-bottom: 110px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   gap: 16px;
   font-size: var(--font-size-base);
@@ -106,9 +106,9 @@ const EventPageRoot = styled.div`
 
 export const EventPage = () => {
   const { eventId } = useParams<{ eventId: string }>()
-
   const queryClient = useQueryClient()
   const fetch = useFetch()
+
   const eventQuery = useQuery({
     queryKey: ['events', eventId],
     queryFn: () => {
@@ -129,6 +129,8 @@ export const EventPage = () => {
     select: (data) => data.bounties,
   })
 
+  console.log(eventBountiesQuery.data)
+
   if (eventQuery.status === 'pending') {
     return <LoadingStatus />
   }
@@ -139,7 +141,6 @@ export const EventPage = () => {
     return <div>404</div>
   }
 
-  console.log(eventBounties)
   return (
     <EventPageRoot>
       <Content>
