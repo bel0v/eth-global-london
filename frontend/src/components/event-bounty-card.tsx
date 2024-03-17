@@ -130,6 +130,7 @@ const CardBody = styled.div`
   font-size: var(--font-size-xs);
 `
 const EventCardWrapper = styled.div`
+  max-width: 320px;
   border-radius: var(--br-base);
   border: 1px solid var(--bg-cold);
   overflow: hidden;
