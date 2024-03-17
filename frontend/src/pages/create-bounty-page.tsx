@@ -13,6 +13,7 @@ import * as Popover from '@radix-ui/react-popover'
 import { knownTokens } from '../data/known-tokens'
 import { useDecimalNumberRifm } from '../hooks/use-decimal-number-rifm'
 import { parseEther } from 'viem'
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 
 const StadiumIcon = styled.img`
   width: 200px;
@@ -283,6 +284,11 @@ export const CreateBountyPage = () => {
   const [token, setToken] = useState(knownTokens[0])
   const [totalReward, setTotalReward] = useState('')
   const [isTokenSelectOpen, setTokenSelectOpen] = useState(false)
+  const { primaryWallet, network } = useDynamicContext()
+
+  const publicClient = primaryWallet?.connector.getPublicClient()
+  const walletClient = primaryWallet?.connector.getWalletClient(network?.toString())
+  console.log(walletClient)
 
   const onFileDrop = async (files: File[]) => {
     const file = files[0]
@@ -315,7 +321,7 @@ export const CreateBountyPage = () => {
         <FrameParent>
           <BackButton to={`/event-dashboard`} />
           <EventType>
-            {eventQuery.data?.icons?.map((icon) => (
+            {eventQuery.data?.teamIcons?.map((icon) => (
               <EventTypeInner key={icon}>
                 <FrameItem alt="" src={icon} />
               </EventTypeInner>
@@ -340,6 +346,7 @@ export const CreateBountyPage = () => {
           onChange={(e) => setName(e.target.value)}
         />
       </AddTitleParent>
+
       <AddTitleParent>
         <b>Choose Tag</b>
         <TagsParent>
@@ -383,7 +390,14 @@ export const CreateBountyPage = () => {
             </Popover.Root>
             <TitleInput inputMode="numeric" {...rewardRifm} />
           </FrameDiv>
-          <ApproveButton>
+          <ApproveButton
+            onClick={async () => {
+              if (publicClient === undefined) {
+                return
+              }
+              // TODO: approve
+            }}
+          >
             <b>Approve</b>
           </ApproveButton>
         </FrameContainer>
@@ -403,6 +417,7 @@ export const CreateBountyPage = () => {
             totalReward: parseEther(totalReward).toString(),
             tag: activeTag,
             participantsLimit: BigInt(5).toString(),
+            userWalletAddress: primaryWallet?.address ?? '',
           }
           const result = await createBounty.mutateAsync(payload)
           console.log(result)

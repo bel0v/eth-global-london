@@ -1,8 +1,10 @@
 import styled from 'styled-components'
-import { EventBounty } from '../data/types'
+import { EventBounty, Moment } from '../data/types'
 import GlassesIconRed from '../images/icons/icon-glasses-red.png'
 import GlassesIconGreen from '../images/icons/icon-glasses-green.png'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
+import { useQuery } from '@tanstack/react-query'
+import { useFetch } from '../hooks/use-fetch'
 
 const EventParticipants = styled.div`
   display: flex;
@@ -29,12 +31,29 @@ const Icon = styled.img`
 `
 
 export const BountyParticipants = ({ eventBounty }: { eventBounty: EventBounty }) => {
-  const isComplete = eventBounty.moments.length === eventBounty.participantsLimit
   const { primaryWallet } = useDynamicContext()
 
-  const isParticipating = eventBounty.moments.some(
-    (moment) => moment.userAddress === primaryWallet?.address
+  const fetch = useFetch()
+  const eventBountyMoments = useQuery({
+    queryKey: ['event-bounty', eventBounty.id, 'moments'],
+    queryFn: () => {
+      return fetch.get(`/bounty/${eventBounty.id}/moments`).json<{ moments: Moment[] }>()
+    },
+    select: (data) => data.moments,
+  })
+
+  if (eventBountyMoments.isPending || eventBountyMoments.isError) {
+    return null
+  }
+
+  const moments = eventBountyMoments.data
+
+  const isComplete = moments.length === eventBounty.participantsLimit
+
+  const isParticipating = moments.some(
+    (moment) => moment.walletAddress === primaryWallet?.address
   )
+
   return (
     <EventParticipants>
       <div>{isParticipating ? "You're in!!!" : 'Fans participating'}</div>
@@ -46,11 +65,11 @@ export const BountyParticipants = ({ eventBounty }: { eventBounty: EventBounty }
         )}
         {!isComplete ? (
           <>
-            <div>{eventBounty.moments.length} of </div>
+            <div>{moments.length} of </div>
             <b>{eventBounty.participantsLimit}</b>
           </>
         ) : (
-          <b>{eventBounty.moments.length}</b>
+          <b>{moments.length}</b>
         )}
       </IconWrapper>
     </EventParticipants>

@@ -10,6 +10,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useFetch } from '../hooks/use-fetch'
 import { Event, EventBounty, Moment } from '../data/types'
 import { LoadingStatus } from '../components/loading-status'
+import { Leaderboard } from '../components/leaderboard'
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 
 const FrameItem = styled.img`
   width: 40px;
@@ -259,6 +261,7 @@ const BountyPageRoot = styled.div`
 export const BountyPage = () => {
   const { bountyId } = useParams<{ bountyId: string }>()
   const fetch = useFetch()
+  const { primaryWallet } = useDynamicContext()
 
   const eventBounty = useQuery({
     queryKey: ['event-bounty', bountyId],
@@ -300,12 +303,17 @@ export const BountyPage = () => {
     console.log(base64string)
   }
 
+  const isParticipating = eventBountyMoments.data.some(
+    (moment) => moment.walletAddress === primaryWallet?.address
+  )
+  const isOrganiser = sessionStorage.getItem('mode') === 'organiser'
+
   return (
     <BountyPageRoot>
       <BackgroundWrapper imageUrl={eventBounty.data.venueImageURI}>
         <BackButton to={`/event-dashboard/${eventBounty.data.eventId}`} />
         <EventType>
-          {eventQuery.data?.icons?.map((icon) => (
+          {eventQuery.data?.teamIcons?.map((icon) => (
             <EventTypeInner>
               <FrameItem alt="" src={icon} />
             </EventTypeInner>
@@ -329,11 +337,16 @@ export const BountyPage = () => {
             <Active>{eventBounty.reward.value} tokens to grab</Active>
           </RewardCoinsParent> */}
         </FrameDiv>
+
+        {(isParticipating || isOrganiser) && (
+          <Leaderboard eventBounty={eventBounty.data} />
+        )}
+
         <FrameParent>
           {eventBountyMoments.data.map((moment) => (
             <FrameWrapper>
               <Fan11Wrapper>
-                <Fan11Icon alt="" src={moment.image} />
+                <Fan11Icon alt="" src={moment.imageURI} />
               </Fan11Wrapper>
             </FrameWrapper>
           ))}

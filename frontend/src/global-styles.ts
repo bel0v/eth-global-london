@@ -114,8 +114,6 @@ export const GlobalStyles = createGlobalStyle`
 
   /* TO UPDATE */
 
-
-
 /* font sizes */
 --font-size-5xl: 24px;
 --font-size-base: 16px;
@@ -137,6 +135,7 @@ export const GlobalStyles = createGlobalStyle`
 --active: #00fb0a;
 --color-mediumorchid: #e64bd6;
 --bg-warm: #e1d7d5;
+--color-darkorchid: #7c4be6;
 
 /* Gaps */
 --gap-5xs: 8px;
@@ -146,6 +145,7 @@ export const GlobalStyles = createGlobalStyle`
 --gap-4xs: 9px;
 --gap-base: 16px;
 --gap-xs: 12px;
+--gap-xl: 20px;
 
 /* Paddings */
 --padding-5xl: 24px;

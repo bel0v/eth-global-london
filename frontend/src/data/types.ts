@@ -4,7 +4,7 @@ export type Event = {
   organizerImage?: string
   date: string
   title?: string
-  icons?: string[]
+  teamIcons?: string[]
 }
 
 export type EventBounty = {
@@ -20,9 +20,11 @@ export type EventBounty = {
 }
 
 export type Moment = {
-  image: string
-  userAddress: string
+  id: string
+  bountyId: string
   score: number
+  imageURI: string
+  walletAddress: string
 }
 
 export type WalletData = {

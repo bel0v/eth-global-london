@@ -172,7 +172,7 @@ export const EventBountyCard = ({
     <EventCardWrapper>
       <EventTypeParent imageUrl={eventBounty.venueImageURI}>
         <EventType>
-          {eventObject?.icons?.map((icon) => (
+          {eventObject?.teamIcons?.map((icon) => (
             <EventTypeIconWrapper key={icon}>
               <EventTypeIcon alt="" src={icon} />
             </EventTypeIconWrapper>
