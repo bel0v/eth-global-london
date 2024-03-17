@@ -13,10 +13,14 @@ async function add(
     rewardToken: string;
     totalReward: bigint;
     tag: string;
+    userWalletAddress: string;
   }>,
   res: IRes
 ) {
-  if (!isAddress(req.body.rewardToken))
+  if (
+    !isAddress(req.body.rewardToken) ||
+    !isAddress(req.body.userWalletAddress)
+  )
     return res
       .status(HttpStatusCodes.BAD_REQUEST)
       .send('Invalid reward token address');
@@ -36,6 +40,7 @@ async function add(
         account.address,
         req.body.rewardToken,
         req.body.totalReward,
+        req.body.userWalletAddress,
       ],
     });
   await walletClient.writeContract(request);

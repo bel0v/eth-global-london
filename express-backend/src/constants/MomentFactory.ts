@@ -39,6 +39,11 @@ const abi = [
         name: 'totalReward',
         type: 'uint256',
       },
+      {
+        internalType: 'address',
+        name: 'deployer',
+        type: 'address',
+      },
     ],
     name: 'createBounty',
     outputs: [
@@ -66,7 +71,7 @@ const abi = [
   },
 ] as const;
 
-const address = '0x2C1595753E98049166346e4F209B80c6fb64e8Ab' as Address;
+const address = '0x5074E1bb5Dd9A5CF8ADaB7891427dc6C2542e467' as Address;
 
 export default {
   abi,

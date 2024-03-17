@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {ERC721URIStorageUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import {ERC721URIStorageUpgradeable} from '@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol';
+import {AccessControlUpgradeable} from '@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol';
 
 contract MomentNFT is AccessControlUpgradeable, ERC721URIStorageUpgradeable {
     struct Participant {
@@ -34,7 +34,7 @@ contract MomentNFT is AccessControlUpgradeable, ERC721URIStorageUpgradeable {
         IERC20 rewardToken_,
         uint256 totalReward_
     ) external initializer {
-        __ERC721_init("Momentor", "MOM");
+        __ERC721_init('Momentor', 'MOM');
         __ERC721URIStorage_init();
         __AccessControl_init();
 
@@ -50,9 +50,9 @@ contract MomentNFT is AccessControlUpgradeable, ERC721URIStorageUpgradeable {
         string memory imageURI,
         uint96 score
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(score <= SCORE_DENOMINATOR, "score exceeds limit");
-        require(currentSupply < maxSupply, "max supply reached");
-        require(bytes(imageURI).length > 0, "imageURI is empty");
+        require(score <= SCORE_DENOMINATOR, 'score exceeds limit');
+        require(currentSupply < maxSupply, 'max supply reached');
+        require(bytes(imageURI).length > 0, 'imageURI is empty');
 
         uint256 nextTokenId = currentSupply + 1;
         _setTokenURI(nextTokenId, imageURI);
@@ -66,25 +66,24 @@ contract MomentNFT is AccessControlUpgradeable, ERC721URIStorageUpgradeable {
     }
 
     function distributeRewards() external {
-        require(contestHasEnded(), "contest still active");
+        require(contestHasEnded(), 'contest still active');
         require(
             totalReward <= rewardToken.balanceOf(address(this)),
-            "insufficient reward tokens"
+            'insufficient reward tokens'
         );
 
         uint256 totalParticipants = participants.length;
         for (uint256 i = 0; i < totalParticipants; i++) {
             address participant = participants[i].addr;
-            require(!wasRewarded[participant], "participant already rewarded");
+            require(!wasRewarded[participant], 'participant already rewarded');
             wasRewarded[participant] = true;
-            uint256 reward = (participants[i].score * totalReward) /
-                cumulativeScore;
+            uint256 reward = (participants[i].score * totalReward) / cumulativeScore;
             rewardToken.transfer(participant, reward);
         }
     }
 
     function endContest() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(!contestHasEnded(), "contest already ended");
+        require(!contestHasEnded(), 'contest already ended');
         currentSupply = maxSupply;
     }
 
