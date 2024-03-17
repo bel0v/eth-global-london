@@ -1,9 +1,12 @@
 import styled from 'styled-components'
 import { EventBountyCard } from '../components/event-bounty-card'
 import { Link, useParams } from 'react-router-dom'
-import { eventsMock } from '../data/events-mock'
 import CoinImage from '../images/coin-left.png'
 import { Indicator } from '../components/indicator'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useFetch } from '../hooks/use-fetch'
+import { Event, EventBounty } from '../data/types'
+import { LoadingStatus } from '../components/loading-status'
 
 const CoinLeftIcon = styled.img`
   width: 180px;
@@ -66,6 +69,7 @@ const ActiveParent = styled.div`
 `
 
 const BountiesWrapper = styled.div`
+  min-width: 360px;
   padding-bottom: 110px;
   display: flex;
   flex-direction: column;
@@ -101,8 +105,35 @@ const EventPageRoot = styled.div`
 `
 
 export const EventPage = () => {
-  const params = useParams<{ eventId: string }>()
-  const event = eventsMock.find((event) => event.id === params.eventId)
+  const { eventId } = useParams<{ eventId: string }>()
+
+  const queryClient = useQueryClient()
+  const fetch = useFetch()
+  const eventQuery = useQuery({
+    queryKey: ['events', eventId],
+    queryFn: () => {
+      return fetch.get(`/event/${eventId}`).json<Event>()
+    },
+    placeholderData: () => {
+      return queryClient
+        .getQueryData<{ events: Event[] }>(['events'])
+        ?.events?.find((event) => event.id === eventId)
+    },
+  })
+
+  const eventBountiesQuery = useQuery({
+    queryKey: ['events', eventId, 'bounties'],
+    queryFn: () => {
+      return fetch.get(`/event/${eventId}/bounties`).json<{ bounties: EventBounty[] }>()
+    },
+    select: (data) => data.bounties,
+  })
+
+  if (eventQuery.status === 'pending') {
+    return <LoadingStatus />
+  }
+  const event = eventQuery.data
+  const eventBounties = eventBountiesQuery.data ?? []
 
   if (event === undefined) {
     return <div>404</div>
@@ -116,14 +147,14 @@ export const EventPage = () => {
           <TokensBountiesWrapper>
             <TokensBounties>Tokens Bounties</TokensBounties>
           </TokensBountiesWrapper>
-          <ManchesterCityLogoPngTransIcon alt="" src={event.image} />
+          <ManchesterCityLogoPngTransIcon alt="" src={event.eventImage} />
         </CoinLeftParent>
         <BountiesWrapper>
           <ActiveParent>
             <b>Active</b>
             <Indicator size={16} />
           </ActiveParent>
-          {event.bounties.map((eventBounty) => (
+          {eventBounties.map((eventBounty) => (
             <Link to={`${eventBounty.id}`} key={eventBounty.id}>
               <EventBountyCard eventBounty={eventBounty} event={event} />
             </Link>

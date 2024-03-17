@@ -1,11 +1,13 @@
 import styled from 'styled-components'
-import { WalletData } from '../data/types'
 import { pluralize } from '../helpers/format'
 import { Link } from 'react-router-dom'
 import { EventBountyCard } from '../components/event-bounty-card'
-import { eventBountiesMock } from '../data/events-mock'
 import { Indicator } from '../components/indicator'
-import FanImage from '../images/fan.png'
+import { useFetch } from '../hooks/use-fetch'
+import { useQuery } from '@tanstack/react-query'
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
+import { WalletData } from '../data/types'
+import { eventBountiesMock } from '../data/events-mock'
 
 const Fan11Icon = styled.img`
   width: 200px;
@@ -83,15 +85,41 @@ const BountiesList = styled.div`
 `
 
 export const MomentorDashboard = () => {
+  const { primaryWallet } = useDynamicContext()
+  const fetch = useFetch()
+
   const walletData: WalletData = {
     bounties: eventBountiesMock,
     avatar: '',
     address: 'admekmlka',
   }
+
+  const walletAvatar = useQuery({
+    queryKey: ['wallet-avatar', primaryWallet?.address],
+    queryFn: () => {
+      return fetch
+        .get(`/user/${primaryWallet?.address}/avatar`)
+        .json<{ avatar: string }>()
+    },
+    enabled: Boolean(primaryWallet),
+  })
+
+  // const walletBounties = useQuery({
+  //   queryKey: ['wallet-bounties', primaryWallet?.address],
+  //   queryFn: () => {
+  //     return fetch
+  //       .get(`/user/${primaryWallet?.address}/bounties`)
+  //       .json<{ avatar: string }>()
+  //   },
+  //   enabled: Boolean(primaryWallet),
+  // })
+
+  // console.log(allBounties.data)
+
   return (
     <FanDashboardRoot>
       <Hero>
-        <Fan11Icon alt="" src={FanImage} />
+        <Fan11Icon alt="" src={walletAvatar.data?.avatar} />
         <b>
           <TitleParagraph>Momentor</TitleParagraph>
           <TitleParagraph>Dashboard</TitleParagraph>

@@ -96,6 +96,8 @@ export const GlobalStyles = createGlobalStyle`
   --bg-cold: #d5d7e1;
   --blue: #0c0b49;
 
+  --spinner-color: #e64bd6;
+
   /* Gaps */
   --gap-8: 8px;
 

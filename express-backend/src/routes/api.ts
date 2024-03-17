@@ -34,7 +34,12 @@ eventRouter.post(
   ),
   EventRoutes.add
 );
-eventRouter.get(Paths.Event.Get, EventRoutes.all);
+eventRouter.get(Paths.Event.All, EventRoutes.all);
+eventRouter.get(
+  Paths.Event.Get,
+  validate(['eventId', 'string', 'params']),
+  EventRoutes.get
+);
 eventRouter.get(
   Paths.Event.Bounties,
   validate(['eventId', 'string', 'params']),

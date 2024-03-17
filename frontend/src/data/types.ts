@@ -1,11 +1,10 @@
 export type Event = {
   id: string
-  image: string
-  organiserIcon?: string
+  eventImage: string
+  organizerImage?: string
+  date: string
   title?: string
-  date?: string
-  icons?: string[]
-  bounties: EventBounty[]
+  // icons?: string[]
 }
 
 export type EventBounty = {
@@ -13,14 +12,14 @@ export type EventBounty = {
   eventId: string
   name: string
   date: string
-  background?: string
-  tag?: TagName
+  venueImageURI?: string
+  tag?: TagName //
   reward: {
     token: string
     value: string //number string
     icon: string
   }
-  moments: Moment[]
+  // moments: Moment[] // query separately
   participantsLimit: number
 }
 

@@ -30,6 +30,8 @@ async function get(req: IReq<{ eventId: string }>, res: IRes) {
     },
   });
 
+  console.log(event);
+
   if (!event) {
     return res
       .status(HttpStatusCodes.NOT_FOUND)
@@ -47,4 +49,4 @@ async function bounties(req: IReq<{ eventId: string }>, res: IRes) {
   return res.status(HttpStatusCodes.OK).json({ bounties });
 }
 
-export default { add, all, bounties };
+export default { add, all, get, bounties };

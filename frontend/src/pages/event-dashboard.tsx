@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 import { Event } from '../data/types'
-import { eventsMock } from '../data/events-mock'
 import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { useFetch } from '../hooks/use-fetch'
+import { LoadingStatus } from '../components/loading-status'
 
 const EventSectionHeader = styled.b`
   font-size: var(--font-size-16);
@@ -71,34 +73,34 @@ const EventsSection = styled.div`
   gap: var(--gap-5xs);
 `
 
-const EventTitle = styled.div`
-  font-size: var(--font-size-12);
-  width: 140px;
-  border-radius: var(--br-81xl);
-  background-color: var(--bg-warm-light-80);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(10px);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--padding-9xs) var(--padding-5xs);
-  box-sizing: border-box;
-`
-const EventDate = styled.div`
-  font-size: var(--font-size-12);
-  border-radius: var(--br-81xl);
-  background-color: var(--bg-warm-light-80);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(10px);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--padding-9xs) var(--padding-5xs);
-`
+// const EventTitle = styled.div`
+//   font-size: var(--font-size-12);
+//   width: 140px;
+//   border-radius: var(--br-81xl);
+//   background-color: var(--bg-warm-light-80);
+//   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+//   backdrop-filter: blur(10px);
+//   overflow: hidden;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   padding: var(--padding-9xs) var(--padding-5xs);
+//   box-sizing: border-box;
+// `
+// const EventDate = styled.div`
+//   font-size: var(--font-size-12);
+//   border-radius: var(--br-81xl);
+//   background-color: var(--bg-warm-light-80);
+//   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+//   backdrop-filter: blur(10px);
+//   overflow: hidden;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   padding: var(--padding-9xs) var(--padding-5xs);
+// `
 const EventTitleParent = styled.div`
   margin: 0 !important;
   position: absolute;
@@ -144,36 +146,51 @@ const EventCard = ({ event }: { event: Event }) => {
   return (
     <EventCardWrapper key={event.id}>
       <EventImageParent>
-        <EventImageIcon alt="" src={event.image} />
-        {event.organiserIcon && <EventorganiserIcon alt="" src={event.organiserIcon} />}
+        <EventImageIcon alt="" src={event.eventImage} />
+        {event.organizerImage && <EventorganiserIcon alt="" src={event.organizerImage} />}
       </EventImageParent>
       <EventTitleParent>
-        {event.title && (
+        {/* {event.title && (
           <EventTitle>
             <b>Lenny Kravitz Concert</b>
           </EventTitle>
-        )}
-        {event.date && (
+        )} */}
+        {/* {event.date && (
           <EventDate>
             <b>07/21/2024</b>
           </EventDate>
-        )}
+        )} */}
       </EventTitleParent>
     </EventCardWrapper>
   )
 }
 
 export const EventDashboard = () => {
-  const events = eventsMock
+  // const events = eventsMock
 
-  const rewardedEvents = events.filter((event) => event.organiserIcon !== undefined)
-  const nonRewardedEvents = events.filter((event) => event.organiserIcon === undefined)
+  const fetch = useFetch()
+  const eventsQuery = useQuery({
+    queryKey: ['events'],
+    queryFn: () => {
+      return fetch.get(`/event/all`).json<{ events: Event[] }>()
+    },
+    select: (data) => data.events,
+  })
+  const events = eventsQuery.data ?? []
+
+  const rewardedEvents = events.filter((event) => event.organizerImage !== undefined)
+  const nonRewardedEvents = events.filter((event) => event.organizerImage === undefined)
   const isOrganiser = sessionStorage.getItem('mode') === 'organiser'
+
+  // if (eventsQuery.status === 'pending') {
+  //   return <LoadingStatus />
+  // }
 
   return (
     <EventDashboardRoot>
       <ChooseAnEventParent>
         <ChooseAnEvent>Choose an Event</ChooseAnEvent>
+        {eventsQuery.status === 'pending' && <LoadingStatus variant="tall" />}
         {rewardedEvents.length > 0 && (
           <EventsSection>
             <EventSectionHeader>Token Gated for you!</EventSectionHeader>
