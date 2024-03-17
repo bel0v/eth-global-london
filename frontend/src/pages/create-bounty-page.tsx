@@ -8,6 +8,11 @@ import { fileToBase64 } from '../helpers/data'
 import { EveryTagName, TagName } from '../data/types'
 import { Tag } from '../components/tag'
 import { useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { useFetch } from '../hooks/use-fetch'
+import * as Popover from '@radix-ui/react-popover'
+import { knownTokens } from '../data/known-tokens'
+import { useDecimalNumberRifm } from '../hooks/use-decimal-number-rifm'
 
 const StadiumIcon = styled.img`
   width: 200px;
@@ -42,6 +47,27 @@ const EventTypeInner = styled.div`
   justify-content: center;
 `
 
+const DropdownWrapper = styled.div`
+  margin-bottom: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
+
+const TokenItem = styled.div`
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  align-items: center;
+  color: black;
+  background: var(--bg-warm-light);
+  border-radius: 8px;
+`
+
 const EventType = styled.div`
   display: flex;
   flex-direction: row;
@@ -57,10 +83,9 @@ const FrameParent = styled.div`
   justify-content: space-between;
   z-index: 1;
 `
-const UploadVenuePhoto = styled.div`
-  position: relative;
-`
+
 const UploadVenuePhotoWrapper = styled.div`
+  opacity: 0.9;
   align-self: stretch;
   border-radius: var(--br-base);
   background-color: var(--bg-warm-light-80);
@@ -70,9 +95,9 @@ const UploadVenuePhotoWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: var(--padding-3xs);
-  z-index: 2;
+  cursor: pointer;
 `
-const StadiumParent = styled.div`
+const StadiumParent = styled.div<{ $imageUrl?: string }>`
   width: 360px;
   border-radius: 0px 0px var(--br-base) var(--br-base);
   background-color: var(--bg-warm);
@@ -87,6 +112,10 @@ const StadiumParent = styled.div`
   box-sizing: border-box;
   position: relative;
   font-size: var(--font-size-5xl);
+  background-image: url('${(props) => props.$imageUrl}');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
 `
 
 const TitleInput = styled.input`
@@ -148,10 +177,9 @@ const RewardCoinsWrapper = styled.div`
   justify-content: center;
 `
 const FrameDiv = styled.div`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
   align-items: center;
-  justify-content: flex-start;
   gap: var(--gap-3xs);
 `
 const ApproveWrapper = styled.div`
@@ -222,20 +250,47 @@ const everyTag = [
   'speaker',
 ] satisfies EveryTagName
 
+type CreateBountyPayload = {
+  eventId: string
+  name: string
+  venueImageURI: string
+  participantsLimit: bigint // 5
+  rewardToken: string
+  totalReward: bigint
+  tag: string
+}
+
 export const CreateBountyPage = () => {
   const { eventId } = useParams<{ eventId: string }>()
   const event = eventsMock.find((event) => event.id === eventId)
-  const [activeTag, setActiveTag] = useState<TagName | null>(null)
+  const [activeTag, setActiveTag] = useState<TagName>()
+  const [venueImageURI, setVenueImageURI] = useState<string>()
+  const [name, setName] = useState<string>('')
+  const [token, setToken] = useState(knownTokens[0])
+  const [totalReward, setTotalReward] = useState('')
+  const [isTokenSelectOpen, setTokenSelectOpen] = useState(false)
+
   const onFileDrop = async (files: File[]) => {
     const file = files[0]
     const base64string = await fileToBase64(file)
-    console.log(base64string)
+    setVenueImageURI(base64string)
   }
+  const fetch = useFetch()
+
+  const createBounty = useMutation({
+    mutationFn: (payload: CreateBountyPayload) =>
+      fetch.post('/bounty/add', { json: payload }),
+  })
+
+  const rewardRifm = useDecimalNumberRifm({
+    value: totalReward,
+    onChange: setTotalReward,
+  })
 
   return (
     <CreateDetailsRoot>
-      <StadiumParent>
-        <StadiumIcon alt="" src={StadiumImage} />
+      <StadiumParent $imageUrl={venueImageURI}>
+        {!venueImageURI && <StadiumIcon alt="" src={StadiumImage} />}
         <FrameParent>
           <BackButton to={`/event-dashboard`} />
           <EventType>
@@ -252,20 +307,24 @@ export const CreateBountyPage = () => {
           accept="image/*"
         >
           <UploadVenuePhotoWrapper>
-            <UploadVenuePhoto>Upload Venue Photo</UploadVenuePhoto>
+            {venueImageURI ? 'Upload another' : 'Upload Venue Photo'}
           </UploadVenuePhotoWrapper>
         </FileUploadInput>
       </StadiumParent>
       <AddTitleParent>
         <b>Add Title</b>
-        <TitleInput placeholder="e.g. First Team Goal" />
+        <TitleInput
+          placeholder="e.g. First Team Goal"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </AddTitleParent>
       <AddTitleParent>
         <b>Choose Tag</b>
         <TagsParent>
           {everyTag.map((tag) => (
-            <button onClick={() => setActiveTag(tag)}>
-              <Tag active={activeTag === tag} key={tag} name={tag} />
+            <button key={tag} onClick={() => setActiveTag(tag)}>
+              <Tag aria-pressed={activeTag === tag} name={tag} />
             </button>
           ))}
         </TagsParent>
@@ -276,18 +335,50 @@ export const CreateBountyPage = () => {
         </AddTokenAmountWrapper>
         <FrameContainer>
           <FrameDiv>
-            <RewardCoinsWrapper>
-              <RewardCoinsIcon alt="" src="/rewardcoins@2x.png" />
-            </RewardCoinsWrapper>
-            {/* <b>100 $MAN</b> */}
-            TODO
+            <Popover.Root open={isTokenSelectOpen} onOpenChange={setTokenSelectOpen}>
+              <Popover.Trigger>
+                <RewardCoinsWrapper>
+                  <RewardCoinsIcon alt="" src={token.icon} />
+                </RewardCoinsWrapper>
+              </Popover.Trigger>
+              <Popover.Content side="top">
+                <DropdownWrapper>
+                  {knownTokens.map((token) => (
+                    <button
+                      onClick={() => {
+                        setToken(token)
+                        setTokenSelectOpen(false)
+                      }}
+                    >
+                      <TokenItem>
+                        <RewardCoinsIcon src={token.icon} />
+                        <span>{token.ticker}</span>
+                      </TokenItem>
+                    </button>
+                  ))}
+                </DropdownWrapper>
+              </Popover.Content>
+            </Popover.Root>
+            <TitleInput inputMode="numeric" {...rewardRifm} />
           </FrameDiv>
           <ApproveWrapper>
             <b>Approve</b>
           </ApproveWrapper>
         </FrameContainer>
       </AddTitleParent>
-      <CreateBountyButton>
+      <CreateBountyButton
+        onClick={() => {
+          // todo:validate all necessary fields
+          console.log({
+            eventId,
+            name,
+            venueImageURI,
+            // rewardToken: string
+            // totalReward: bigint
+            tag: activeTag,
+          })
+        }}
+      >
         <b>Create Bounty</b>
       </CreateBountyButton>
     </CreateDetailsRoot>

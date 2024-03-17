@@ -17,6 +17,7 @@ const Clock1Icon = styled.img`
 `
 
 const MomentorRecapWrapper = styled.div`
+  opacity: 0.95;
   border-radius: var(--br-xs);
   background-color: var(--bg-warm-light-80);
   backdrop-filter: blur(10px);

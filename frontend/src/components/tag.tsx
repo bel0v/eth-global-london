@@ -4,9 +4,11 @@ const tags = Object.values(
   import.meta.glob('../images/tags/*.svg', { eager: true, as: 'url' })
 )
 
-const TagWrapper = styled.div<{ active: boolean }>`
-  background-color: ${(props) =>
-    props.active ? 'var(--bg-warm)' : 'var(--bg-warm-light-80)'};
+const TagWrapper = styled.div`
+  background-color: var(--bg-warm-light-80);
+  &[aria-pressed='true'] {
+    background-color: var(--bg-warm);
+  }
   border-radius: var(--br-81xl);
   backdrop-filter: blur(20px);
   border: 1px solid var(--blue);
@@ -44,13 +46,13 @@ const tagLabels: Record<TagName, string> = {
 
 interface TagProps {
   name: TagName
-  active?: boolean
+  'aria-pressed'?: boolean
 }
 
-export const Tag = ({ name, active = false }: TagProps) => {
+export const Tag = ({ name, ...rest }: TagProps) => {
   const url = tags.find((tagPath) => tagPath.match(name))
   return (
-    <TagWrapper active={active}>
+    <TagWrapper {...rest}>
       <TagImage alt="" src={url} />
       <TagTitle>{tagLabels[name]}</TagTitle>
     </TagWrapper>

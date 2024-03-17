@@ -4,7 +4,7 @@ export type Event = {
   organizerImage?: string
   date: string
   title?: string
-  // icons?: string[]
+  icons?: string[]
 }
 
 export type EventBounty = {

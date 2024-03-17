@@ -26,21 +26,10 @@ export const eventBountiesMock: EventBounty[] = [
       value: '200.1',
       icon: TokenUSDCImage,
     },
-    moments: [
-      {
-        image: '',
-        score: 0.3,
-        userAddress: 'aaaabbb',
-      },
-      {
-        image: '',
-        score: 0.2,
-        userAddress: 'cccddd',
-      },
-    ],
+
     participantsLimit: 5,
     tag: 'goal',
-    background: BountyBg1,
+    venueImageURI: BountyBg1,
   },
   {
     eventId: '1',
@@ -53,71 +42,42 @@ export const eventBountiesMock: EventBounty[] = [
       value: '500',
       icon: TokenManImage,
     },
-    moments: [
-      {
-        image: '',
-        score: 0.3,
-        userAddress: 'aaaabbb',
-      },
-      {
-        image: '',
-        score: 0.4,
-        userAddress: 'cccddd',
-      },
-      {
-        image: '',
-        score: 0.4,
-        userAddress: 'vdfvdfv',
-      },
-      {
-        image: '',
-        score: 0.4,
-        userAddress: 'dfvdfvdfvdfvdfv',
-      },
-      {
-        image: '',
-        score: 0.4,
-        userAddress: 'dfvdfvklmlkm',
-      },
-    ],
     participantsLimit: 5,
-    background: undefined,
+    venueImageURI: undefined,
   },
 ]
 
 export const eventsMock: Event[] = [
   {
     id: '1',
-    image: Event1Image,
+    eventImage: Event1Image,
     icons: [EventIcon1, EventIcon2],
-    organiserIcon: RewardFanImage,
-    bounties: eventBountiesMock,
+    organizerImage: RewardFanImage,
+    date: new Date().toString(),
   },
   {
     id: '2',
-    image: Event2Image,
+    eventImage: Event2Image,
     icons: [EventIcon1, EventIcon2],
-    organiserIcon: RewardEthImage,
-    bounties: [],
+    organizerImage: RewardEthImage,
+    date: new Date().toString(),
   },
   {
     id: '3',
-    image: Event3Image,
-    organiserIcon: RewardApeImage,
-    bounties: [],
+    eventImage: Event3Image,
+    organizerImage: RewardApeImage,
+    date: new Date().toString(),
   },
   {
     id: '4',
-    image: Event4Image,
+    eventImage: Event4Image,
     title: 'Cats N Roses',
-    date: '07/21/2024',
-    bounties: [],
+    date: new Date().toString(),
   },
   {
     id: '5',
-    image: Event5Image,
+    eventImage: Event5Image,
     title: 'Lenny Kravitz Concert',
-    date: '07/21/2024',
-    bounties: [],
+    date: new Date().toString(),
   },
 ]
