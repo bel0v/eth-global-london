@@ -3,7 +3,7 @@ import TokenApeImage from '../images/tokens/token-ape.jpg'
 
 export const knownTokens = [
   {
-    address: '0xF2c97Cb2A5c4B308cc264d9e7c57BB67F4Dca874', //testnet
+    address: '0xB241898A378e4ff39cb0ccdAe6B585D3A36d32Af', //testnet
     ticker: '$CITY',
     icon: TokenManImage,
   },
@@ -18,8 +18,8 @@ export const knownTokensMap: Record<
   string,
   { address: string; ticker: string; icon: string }
 > = {
-  '0xF2c97Cb2A5c4B308cc264d9e7c57BB67F4Dca874': {
-    address: '0xF2c97Cb2A5c4B308cc264d9e7c57BB67F4Dca874', //testnet
+  '0xB241898A378e4ff39cb0ccdAe6B585D3A36d32Af': {
+    address: '0xB241898A378e4ff39cb0ccdAe6B585D3A36d32Af', //testnet
     ticker: '$CITY',
     icon: TokenManImage,
   },
