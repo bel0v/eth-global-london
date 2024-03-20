@@ -1,5 +1,9 @@
 # Momentor: Rewards Protocol for Quality Content Contribution
 
+[EthGlobal London 2024 showcase](https://ethglobal.com/showcase/momentor-pngy4)
+
+<img width="300" alt="Screenshot 2024-03-20 at 01 09 25" src="https://github.com/bel0v/eth-global-london/assets/2889382/b8fbe2bc-eb39-4f0a-abec-9682bd5f66c4">
+
 **Momentor** is a gamified user engagement protocol that leverages content contribution to cultivate and maintain a dedicated user base. This approach not only fosters a vibrant community but also generates high-quality content for event organizers to make use of as assets (for example marketing material) and training AI models, all while still being able to reward and give credit to the original controbutors. Momentor stands at the forefront of AI and blockchain integration in the event industry.
 
 ## Overview
